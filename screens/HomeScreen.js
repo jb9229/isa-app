@@ -6,163 +6,203 @@ import {
   StyleSheet,
   TouchableOpacity,
   View,
+  Text,
 } from 'react-native';
 
-import { Container, Header, Tab, Tabs, ScrollableTab, Text } from 'native-base';
+import { ViewPager, IndicatorViewPager, PagerDotIndicator } from 'rn-viewpager';
+import { Content, Button, Icon, Grid} from 'native-base';
+import StepIndicator from 'react-native-step-indicator';
 
-import { WebBrowser } from 'expo';
+import EstmtCreateBasicForm from './estimateCreate/EstmtCreateBasicForm'
+import EstmtCreateAddrForm from './estimateCreate/EstmtCreateAddrForm'
+import EstmtCreatefurnitureForm from './estimateCreate/EstmtCreatefurnitureForm'
+import EstmtCreatePhotoForm from './estimateCreate/EstmtCreatePhotoForm'
+
 
 import { MonoText } from '../components/StyledText';
+
+
+
+
+const PAGES = ['아파트/빌라/단독?, 포장이사?','예상물량/이사 예정일?/거주형태/평수/층수/','이사 주소지(현거주지 -> 이사지)','가구정보','포토'];
+
+const firstIndicatorStyles = {
+  stepIndicatorSize: 30,
+  currentStepIndicatorSize:40,
+  separatorStrokeWidth: 3,
+  currentStepStrokeWidth: 5,
+  separatorFinishedColor: '#4aae4f',
+  separatorUnFinishedColor: '#a4d4a5',
+  stepIndicatorFinishedColor: '#4aae4f',
+  stepIndicatorUnFinishedColor: '#a4d4a5',
+  stepIndicatorCurrentColor: '#ffffff',
+  stepIndicatorLabelFontSize: 15,
+  currentStepIndicatorLabelFontSize: 15,
+  stepIndicatorLabelCurrentColor: '#000000',
+  stepIndicatorLabelFinishedColor: '#ffffff',
+  stepIndicatorLabelUnFinishedColor: 'rgba(255,255,255,0.5)',
+  labelColor: '#666666',
+  labelSize: 12,
+  currentStepLabelColor: '#4aae4f'
+}
+
+const secondIndicatorStyles = {
+  stepIndicatorSize: 30,
+  currentStepIndicatorSize:40,
+  separatorStrokeWidth: 2,
+  currentStepStrokeWidth: 3,
+  stepStrokeCurrentColor: '#fe7013',
+  stepStrokeWidth: 3,
+  stepStrokeFinishedColor: '#fe7013',
+  stepStrokeUnFinishedColor: '#aaaaaa',
+  separatorFinishedColor: '#fe7013',
+  separatorUnFinishedColor: '#aaaaaa',
+  stepIndicatorFinishedColor: '#fe7013',
+  stepIndicatorUnFinishedColor: '#ffffff',
+  stepIndicatorCurrentColor: '#ffffff',
+  stepIndicatorLabelFontSize: 13,
+  currentStepIndicatorLabelFontSize: 13,
+  stepIndicatorLabelCurrentColor: '#fe7013',
+  stepIndicatorLabelFinishedColor: '#ffffff',
+  stepIndicatorLabelUnFinishedColor: '#aaaaaa',
+  labelColor: '#999999',
+  labelSize: 13,
+  currentStepLabelColor: '#fe7013'
+}
+
+const thirdIndicatorStyles = {
+  stepIndicatorSize: 25,
+  currentStepIndicatorSize:30,
+  separatorStrokeWidth: 2,
+  currentStepStrokeWidth: 3,
+  stepStrokeCurrentColor: '#7eaec4',
+  stepStrokeWidth: 3,
+  stepStrokeFinishedColor: '#7eaec4',
+  stepStrokeUnFinishedColor: '#dedede',
+  separatorFinishedColor: '#7eaec4',
+  separatorUnFinishedColor: '#dedede',
+  stepIndicatorFinishedColor: '#7eaec4',
+  stepIndicatorUnFinishedColor: '#ffffff',
+  stepIndicatorCurrentColor: '#ffffff',
+  stepIndicatorLabelFontSize: 0,
+  currentStepIndicatorLabelFontSize: 0,
+  stepIndicatorLabelCurrentColor: 'transparent',
+  stepIndicatorLabelFinishedColor: 'transparent',
+  stepIndicatorLabelUnFinishedColor: 'transparent',
+  labelColor: '#999999',
+  labelSize: 13,
+  currentStepLabelColor: '#7eaec4'
+}
+
+const html = `
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+    </head>
+    <body>
+        <div id="test-app">Hello world!</div>
+
+    </body>
+    </html>
+`
 
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
     header: null,
   };
 
-  render() {
-    return (
-      <Container>
-        <Header hasTabs/>
-        <Tabs renderTabBar={()=> <ScrollableTab />}>
-          <Tab heading="Tab1">
-            <Text>Tab1</Text>
-          </Tab>
-          <Tab heading="Tab2">
-            <Text>Tab2</Text>
-          </Tab>
-          <Tab heading="Tab3">
-            <Text>Tab3</Text>
-          </Tab>
-          <Tab heading="Tab4">
-            <Text>Tab4</Text>
-          </Tab>
-          <Tab heading="Tab5">
-            <Text>Tab5</Text>
-          </Tab>
-        </Tabs>
-      </Container>
-    );
+  constructor() {
+    super();
+
+      this.state = {
+          currentPage:1
+      }
   }
 
-  _maybeRenderDevelopmentModeWarning() {
-    if (__DEV__) {
-      const learnMoreButton = (
-        <Text onPress={this._handleLearnMorePress} style={styles.helpLinkText}>
-          Learn more
-        </Text>
-      );
-
-      return (
-        <Text style={styles.developmentModeText}>
-          Development mode is enabled, your app will be slower but you can use useful development
-          tools. {learnMoreButton}
-        </Text>
-      );
-    } else {
-      return (
-        <Text style={styles.developmentModeText}>
-          You are not in development mode, your app will run at full speed.
-        </Text>
-      );
+  componentWillReceiveProps(nextProps,nextState) {
+    if(nextState.currentPage != this.state.currentPage) {
+      if(this.viewPager) {
+        this.viewPager.setPage(nextState.currentPage)
+      }
     }
   }
 
-  _handleLearnMorePress = () => {
-    WebBrowser.openBrowserAsync('https://docs.expo.io/versions/latest/guides/development-mode');
-  };
+  render() {
+    return (
+      <View style={styles.container}>
+        <View style={styles.stepIndicator}>
+          <StepIndicator customStyles={firstIndicatorStyles} currentPosition={this.state.currentPage} labels={["기본 정보","이사지","집기 정보","포토","코멘트"]} />
+        </View>
 
-  _handleHelpPress = () => {
-    WebBrowser.openBrowserAsync(
-      'https://docs.expo.io/versions/latest/guides/up-and-running.html#can-t-see-your-changes'
+        <ViewPager
+          style={{flexGrow:1}}
+          ref={(viewPager) => {this.viewPager = viewPager}}
+          onPageSelected={(page) => {this.setState({currentPage:page.position})}}
+          peekEnabled = {true}
+          horizontalScroll = {false}
+
+          >
+
+          {PAGES.map((page, i) => this.renderViewPagerPage(page, i))}
+        </ViewPager>
+
+        <Content>
+          <Grid>
+            <Button large  primary >
+              <Text>이전</Text>
+            </Button>
+            <Button large success>
+              <Text>다음</Text>
+            </Button>
+          </Grid>
+        </Content>
+      </View>
     );
-  };
+  }
+
+  renderViewPagerPage = (data, i) => {
+    if(i == 0)
+    {
+      return(
+        <View key={i} style={styles.page} style={{width:350, height:400}}>
+          <EstmtCreatePhotoForm />
+        </View>
+      );
+    }
+    else if(i == 1)
+    {
+      return(
+        <View style={styles.page} key={i}>
+          <EstmtCreateAddrForm />
+          <Text>test2</Text>
+        </View>
+      );
+    }
+    else
+    {
+      return(
+        <View style={styles.page} key={i}>
+            <EstmtCreateAddrForm />
+            <Text>test3</Text>
+        </View>
+      );
+    }
+  }
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#ffffff',
   },
-  developmentModeText: {
-    marginBottom: 20,
-    color: 'rgba(0,0,0,0.4)',
-    fontSize: 14,
-    lineHeight: 19,
-    textAlign: 'center',
+  stepIndicator: {
+    marginVertical:50,
   },
-  contentContainer: {
-    paddingTop: 30,
-  },
-  welcomeContainer: {
-    alignItems: 'center',
-    marginTop: 10,
-    marginBottom: 20,
-  },
-  welcomeImage: {
-    width: 100,
-    height: 80,
-    resizeMode: 'contain',
-    marginTop: 3,
-    marginLeft: -10,
-  },
-  getStartedContainer: {
-    alignItems: 'center',
-    marginHorizontal: 50,
-  },
-  homeScreenFilename: {
-    marginVertical: 7,
-  },
-  codeHighlightText: {
-    color: 'rgba(96,100,109, 0.8)',
-  },
-  codeHighlightContainer: {
-    backgroundColor: 'rgba(0,0,0,0.05)',
-    borderRadius: 3,
-    paddingHorizontal: 4,
-  },
-  getStartedText: {
-    fontSize: 17,
-    color: 'rgba(96,100,109, 1)',
-    lineHeight: 24,
-    textAlign: 'center',
-  },
-  tabBarInfoContainer: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    ...Platform.select({
-      ios: {
-        shadowColor: 'black',
-        shadowOffset: { height: -3 },
-        shadowOpacity: 0.1,
-        shadowRadius: 3,
-      },
-      android: {
-        elevation: 20,
-      },
-    }),
-    alignItems: 'center',
-    backgroundColor: '#fbfbfb',
-    paddingVertical: 20,
-  },
-  tabBarInfoText: {
-    fontSize: 17,
-    color: 'rgba(96,100,109, 1)',
-    textAlign: 'center',
-  },
-  navigationFilename: {
-    marginTop: 5,
-  },
-  helpContainer: {
-    marginTop: 15,
-    alignItems: 'center',
-  },
-  helpLink: {
-    paddingVertical: 15,
-  },
-  helpLinkText: {
-    fontSize: 14,
-    color: '#2e78b7',
-  },
+  page: {
+    flex:2,
+    justifyContent:'center',
+    alignItems:'center'
+  }
 });
