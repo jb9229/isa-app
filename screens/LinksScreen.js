@@ -4,7 +4,7 @@ import { ExpoLinksView } from '@expo/samples';
 
 export default class LinksScreen extends React.Component {
   static navigationOptions = {
-    title: 'Links',
+    title: '경매 리스트',
   };
 
   render() {
