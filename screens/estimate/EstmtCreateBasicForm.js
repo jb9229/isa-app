@@ -106,9 +106,6 @@ export default class EstmtCreateBasicForm extends React.Component {
 
     var estmt = {date: this.state.date, amount: this.state.amount};
 
-    console.log("isValid: "+isValid);
-    console.log("estmt.date: "+estmt.date);
-    console.log("estmt.amount: "+estmt.amount);
     this.props.saveBasicInfo(estmt);
   }
 

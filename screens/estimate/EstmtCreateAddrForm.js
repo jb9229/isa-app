@@ -1,44 +1,87 @@
 import React from 'react';
-import {StyleSheet, View, WebView} from 'react-native';
+import {StyleSheet, View, WebView, Alert} from 'react-native';
 import {Button, Grid, Icon, Text} from 'native-base';
 
 
 export default class EstmtCreateAddrForm extends React.Component {
-    propTypes: {
-        saveAddrInfo: React.PropTypes.func.isRequired,
-        previousePage: React.PropTypes.func.isRequired,
+  //Constructor & Static
+  constructor(props){
+    super(props);
+
+    this.state={
+      errorMessage: '',
+      postData: {
+        cmAddress : '',
+        cmAddressDetail : '',
+        nmAddress : '',
+        nmAddressDetail : ''
+      }
     };
+  }
+  propTypes: {
+    saveAddrInfo: React.PropTypes.func.isRequired,
+    previousePage: React.PropTypes.func.isRequired,
+  };
 
-    render() {
-        return (
-          <View style={styles.container}>
-            <WebView
-                source={{uri: 'https://jb9229.github.io/postcode/'}}
-                style={{flex: 1,}}
-                mixedContentMode='always'
-            />
+  render() {
+      return (
+        <View style={styles.container}>
+          <WebView
+              source={{uri: 'https://jb9229.github.io/postcode/'}}
+              style={{flex: 1,}}
+              mixedContentMode='always'
+              onMessage={(event)=> this.savePostData(event.nativeEvent.data) }
+          />
 
-            <Grid>
-              <Button large  primary onPress={() => this.props.previousePage()}>
-                <Text>이전</Text>
-              </Button>
-              <Button large success onPress={() => this.handleSubmit()}>
-                <Text>다음</Text>
-              </Button>
-            </Grid>
-          </View>
-        );
-    }
+          <Text style={styles.errorMessage}>{this.state.errorMessage}</Text>
+          <Grid>
+            <Button large  primary onPress={() => this.props.previousePage()}>
+              <Text>이전</Text>
+            </Button>
+            <Button large success onPress={() => this.handleSubmit()}>
+              <Text>다음</Text>
+            </Button>
+          </Grid>
+        </View>
+      );
+  }
+
+  savePostData = (postDataJson) => {
+    var postDataObj = JSON.parse(postDataJson);
+
+    console.log('Debug postDataJson: '+ postDataJson)
+    this.setState({
+      postData: {
+        cmAddress : postDataObj.cmAddress,
+        cmAddressDetail : postDataObj.cmAddressDetail,
+        nmAddress : postDataObj.nmAddress,
+        nmAddressDetail : postDataObj.nmAddressDetail
+      }
+    });
+  }
+
+  //Method of Submit Info Validation
+  isValidSubmitInfo = () => {
+    let postDataObj = this.state.postData;
+
+    if(postDataObj.cmAddress == ''){this.setState({errorMessage: '현거주지 주소는 필수 항목 입니다, 주소를 입력해 주세요.'}); return false;}
+    if(postDataObj.cmAddressDetail == ''){this.setState({errorMessage: '현거주지 상세주소는 필수 항목 입니다, 주소를 입력해 주세요.'}); return false;}
+    if(postDataObj.nmAddress == ''){this.setState({errorMessage: '이사지 주소는 필수 항목 입니다, 주소를 입력해 주세요.'}); return false;}
+    if(postDataObj.nmAddressDetail == ''){this.setState({errorMessage: '이사지 상세주소는 필수 항목 입니다, 주소를 입력해 주세요.'}); return false;}
 
 
-    //Method of Save Estimate Address Info
-    handleSubmit() {
-      // let isValid = this.isValidEstmtBasicInfo();
-      //
-      // if(!isValid){return;}
+    return true;
+  }
 
-      this.props.saveAddrInfo();
-    }
+  //Method of Save Estimate Address Info
+  handleSubmit() {
+    let isValid = this.isValidSubmitInfo();
+
+
+    // if(!isValid){return;}
+
+    this.props.saveAddrInfo(this.state.postData);
+  }
 }
 
 const styles = StyleSheet.create({
@@ -47,5 +90,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     width: 350,
     height:450,
-  }
+  },
+  errorMessage: {
+    color: 'red'
+  },
 });

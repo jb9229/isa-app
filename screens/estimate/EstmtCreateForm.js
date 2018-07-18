@@ -52,6 +52,16 @@ export default class EstmtCreateForm extends React.Component {
 
     this.state = {
         currentPage: 0,
+        postData: {
+          cmAddress : '',
+          cmAddressDetail : '',
+          nmAddress : '',
+          nmAddressDetail : ''
+        },
+        frntrData: {
+          bed : false,
+          bedType : '',
+        }
     }
   }
 
@@ -110,15 +120,66 @@ export default class EstmtCreateForm extends React.Component {
   }
 
   saveEstmtBasicInfo = (submit) => {
-    this.props.onSubmit(submit);
+    this.submit(submit);
 
     this.nextPage();
   }
 
   //Method of Save Address Info
   saveAddrInfo = (addrInfo) => {
+    this.setState({
+      postData: {
+        cmAddress : addrInfo.cmAddress,
+        cmAddressDetail : addrInfo.cmAddressDetail,
+        nmAddress : addrInfo.nmAddress,
+        nmAddressDetail : addrInfo.nmAddressDetail
+      }
+    });
 
     this.nextPage();
+  }
+
+  //Method of Save furniture Info
+  saveFrntrInfo = (frntrInfo) => {
+    this.setState({
+      frntrData: {
+        bed : frntrInfo.bed,
+        bedType : frntrInfo.bedType,
+      }
+    });
+
+    this.nextPage();
+  }
+
+  //Method of Save Photo Info
+  savePhotoInfo = (photoInfo) => {
+    this.setState({
+      photoData: {
+        
+      }
+    });
+
+    this.nextPage();
+  }
+
+  submit = values => {
+    // print the form values to the console
+
+    console.log(values)
+  }
+
+  submitEstmt() {
+    fetch('http://localhost:8080/api/students',
+    {   method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(this.state.estimate)
+    })
+    .then(
+        res => this.loadEstmtFromServer()
+    )
+    .catch( err => cosole.error(err))
   }
 
   renderViewPagerPage = (data, i) => {
@@ -138,11 +199,20 @@ export default class EstmtCreateForm extends React.Component {
         </View>
       );
     }
-    else
+    else if(i == 2)
     {
       return(
         <View style={styles.page} key={i}>
-          <EstmtCreatefurnitureForm />
+          <EstmtCreatefurnitureForm saveFrntrInfo={this.saveFrntrInfo} previousePage={this.previousePage}/>
+            <Text>test3</Text>
+        </View>
+      );
+    }
+    else if(i == 3)
+    {
+      return(
+        <View style={styles.page} key={i}>
+          <EstmtCreatePhotoForm savePhotoInfo={this.savePhotoInfo} previousePage={this.previousePage}/>
             <Text>test3</Text>
         </View>
       );

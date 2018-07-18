@@ -15,27 +15,7 @@ export default class EstmtCreateScreen extends React.Component {
   //UI Render
   render() {
     return (
-      <EstmtCreateForm onSubmit={this.submit} />
+      <EstmtCreateForm />
     )
-  }
-
-  submit = values => {
-    // print the form values to the console
-    console.log('Debug: Submit method!')
-    console.log(values)
-  }
-
-  submitEstmt() {
-    fetch('http://localhost:8080/api/students',
-    {   method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(this.state.estimate)
-    })
-    .then(
-        res => this.loadEstmtFromServer()
-    )
-    .catch( err => cosole.error(err))
   }
 }

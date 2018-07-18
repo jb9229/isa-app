@@ -29,8 +29,6 @@ export default class EstmtCreatePhotoForm extends React.Component{
 
         <Button onPress={this._pickImage} title="Pick an image from camera roll"/>
 
-        <Button onPress={this._takePhoto} title="Take a photo" />
-
         {this._maybeRenderImage()}
         {this._maybeRenderUploadingOverlay()}
 
@@ -79,15 +77,6 @@ export default class EstmtCreatePhotoForm extends React.Component{
   _copyToClipboard = () => {
     Clipboard.setString(this.state.image);
     alert('Copied image URL to clipboard');
-  };
-
-  _takePhoto = async() => {
-    let pickerResult = await ImagePicker.launchCameraAsync({
-      allowsEditing: true,
-      aspect:[4, 3],
-    });
-
-    this._handleImagePicked(pickerResult);
   };
 
   _pickImage = async () => {
