@@ -1,6 +1,6 @@
 import React from 'react';
 import {StyleSheet, View, WebView, Alert} from 'react-native';
-import {Button, Grid, Icon, Text} from 'native-base';
+import {Button, Container, Content, Grid, Icon, Text} from 'native-base';
 
 
 export default class EstmtCreateAddrForm extends React.Component {
@@ -25,10 +25,11 @@ export default class EstmtCreateAddrForm extends React.Component {
 
   render() {
       return (
-        <View style={styles.container}>
+        <Container>
+          <Content padder>
           <WebView
               source={{uri: 'https://jb9229.github.io/postcode/'}}
-              style={{flex: 1,}}
+              style={{flex: 1, width: 300, height: 400}}
               mixedContentMode='always'
               onMessage={(event)=> this.savePostData(event.nativeEvent.data) }
           />
@@ -42,7 +43,8 @@ export default class EstmtCreateAddrForm extends React.Component {
               <Text>다음</Text>
             </Button>
           </Grid>
-        </View>
+        </Content>
+      </Container>
       );
   }
 

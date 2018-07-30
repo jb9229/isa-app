@@ -8,18 +8,17 @@ import {
   View,
   Text,
 } from 'react-native';
-
 import { ViewPager, IndicatorViewPager, PagerDotIndicator } from 'rn-viewpager';
 import { Content, Button, Icon} from 'native-base';
 import StepIndicator from 'react-native-step-indicator';
-
 import EstmtCreateBasicForm from './EstmtCreateBasicForm'
 import EstmtCreateAddrForm from './EstmtCreateAddrForm'
 import EstmtCreatefurnitureForm from './EstmtCreatefurnitureForm'
 import EstmtCreatePhotoForm from './EstmtCreatePhotoForm'
+import EstmtCreateCommForm from './EstmtCreateCommForm'
 
 
-
+//Const
 const PAGES = ['아파트/빌라/단독?, 포장이사?','예상물량/이사 예정일?/거주형태/평수/층수/','이사 주소지(현거주지 -> 이사지)','가구정보','포토'];
 
 const firstIndicatorStyles = {
@@ -43,7 +42,7 @@ const firstIndicatorStyles = {
 }
 
 
-
+//class
 export default class EstmtCreateForm extends React.Component {
 
   //Constructor
@@ -51,17 +50,49 @@ export default class EstmtCreateForm extends React.Component {
     super();
 
     this.state = {
-        currentPage: 0,
-        postData: {
-          cmAddress : '',
-          cmAddressDetail : '',
-          nmAddress : '',
-          nmAddressDetail : ''
-        },
-        frntrData: {
-          bed : false,
-          bedType : '',
-        }
+      currentPage: 0,
+      estimate: {
+         date: '',
+         userName:'',
+         amount: 0,
+         regidentType: '',
+         floor: 0,
+         space: 0,
+         condition: '',
+
+        cmAddress : '',
+        cmAddressDetail : '',
+        nmAddress : '',
+        nmAddressDetail : '',
+
+        airConditioner: false,
+        airConditionerType: '',
+        bed: false,
+        bedType: '',
+        drawer: false,
+        drawerType: '',
+        sofa: false,
+        sofatType: '',
+        tv: false,
+        tvType: '',
+        piano: false,
+        pianoType: '',
+        waterPurifier: false,
+        waterPurifierType: '',
+        bidet: false,
+        bidetType: '',
+
+        entrPhoto: '',
+        lrPhoto: '',
+        kchPhoto: '',
+        rm1Photo: '',
+        rm2Photo: '',
+        rm3Photo: '',
+        rm4Photo: '',
+        rm5Photo: '',
+
+        clientAsk: '',
+      }
     }
   }
 
@@ -103,6 +134,7 @@ export default class EstmtCreateForm extends React.Component {
   }
 
 
+
  //Method of Previous Step Page
   previousePage = () => {
     let prePageNum  = this.state.currentPage;
@@ -119,20 +151,35 @@ export default class EstmtCreateForm extends React.Component {
     this.viewPager.setPage(prePageNum+1);
   }
 
-  saveEstmtBasicInfo = (submit) => {
-    this.submit(submit);
+  //Method of Save Basic Info
+  saveEstmtBasicInfo = (data) => {
+    this.setState({
+      ...state,
+      estimate: {
+        ...obj.estimate,
+        date: data.date,
+        userName: data.userName,
+        amount: data.amount,
+        regidentType: data.regidentType,
+        floor: data.floor,
+        space: data.space,
+        condition: data.condition,
+      }
+    });
 
     this.nextPage();
   }
 
   //Method of Save Address Info
-  saveAddrInfo = (addrInfo) => {
+  saveAddrInfo = (data) => {
     this.setState({
-      postData: {
-        cmAddress : addrInfo.cmAddress,
-        cmAddressDetail : addrInfo.cmAddressDetail,
-        nmAddress : addrInfo.nmAddress,
-        nmAddressDetail : addrInfo.nmAddressDetail
+      ...obj,
+      estimate: {
+        ...obj.estimate,
+        cmAddress : data.cmAddress,
+        cmAddressDetail : data.cmAddressDetail,
+        nmAddress : data.nmAddress,
+        nmAddressDetail : data.cmAddressDetail,
       }
     });
 
@@ -140,11 +187,27 @@ export default class EstmtCreateForm extends React.Component {
   }
 
   //Method of Save furniture Info
-  saveFrntrInfo = (frntrInfo) => {
+  saveFrntrInfo = (data) => {
     this.setState({
-      frntrData: {
-        bed : frntrInfo.bed,
-        bedType : frntrInfo.bedType,
+      ...obj,
+      estimate: {
+        ...obj.estimate,
+        airConditioner: data.airConditioner,
+        airConditionerType: data.airConditionerType,
+        bed: data.bed,
+        bedType: data.bedType,
+        drawer: data.drawer,
+        drawerType: data.drawerType,
+        sofa: data.sofa,
+        sofatType: data.sofaType,
+        tv: data.tv,
+        tvType: data.tvType,
+        piano: data.piano,
+        pianoType: data.pianoType,
+        waterPurifier: data.waterPurifier,
+        waterPurifierType: data.waterPurifierType,
+        bidet: data.bidet,
+        bidetType: data.bidetType,
       }
     });
 
@@ -152,15 +215,39 @@ export default class EstmtCreateForm extends React.Component {
   }
 
   //Method of Save Photo Info
-  savePhotoInfo = (photoInfo) => {
+  savePhotoInfo = (data) => {
     this.setState({
-      photoData: {
-        
+      ...obj,
+      estimate: {
+        ...obj.estimate,
+        entrPhoto: data.entrPhoto,
+        lrPhoto: data.lrPhoto,
+        kchPhoto: data.kchPhoto,
+        rm1Photo: data.rm1Photo,
+        rm2Photo: data.rm2Photo,
+        rm3Photo: data.rm3Photo,
+        rm4Photo: data.rm4Photo,
+        rm5Photo: data.rm5Photo,
       }
     });
 
     this.nextPage();
   }
+
+
+  //Method of Save Photo Info
+  saveCommInfo = (data) => {
+    this.setState({
+      ...obj,
+      estimate: {
+        ...obj.estimate,
+        clientAsk: '',
+      }
+    });
+
+    this.submitEstmt();
+  }
+
 
   submit = values => {
     // print the form values to the console
@@ -169,18 +256,37 @@ export default class EstmtCreateForm extends React.Component {
   }
 
   submitEstmt() {
+    JSON.stringify(this.state.estimate);
+
     fetch('http://localhost:8080/api/students',
     {   method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          Accept: 'application/json',
+          'Content-Type': 'multipart/form-data',
         },
         body: JSON.stringify(this.state.estimate)
     })
     .then(
-        res => this.loadEstmtFromServer()
+        res => {
+          this.loadEstmtFromServer();
+          this.props.navigation.navigate('Home');
+        }
     )
     .catch( err => cosole.error(err))
+
+
+
+    let uriParts = uri.split('.');
+    let fileType = uri[uri.length - 1];
+
+    let formData = new FormData();
+    formData.append('photo1', {
+      uri,
+      name: `photo.${fileType}`,
+      type: `image/${fileType}`,
+    });
   }
+
 
   renderViewPagerPage = (data, i) => {
     if(i == 0)
@@ -204,7 +310,6 @@ export default class EstmtCreateForm extends React.Component {
       return(
         <View style={styles.page} key={i}>
           <EstmtCreatefurnitureForm saveFrntrInfo={this.saveFrntrInfo} previousePage={this.previousePage}/>
-            <Text>test3</Text>
         </View>
       );
     }
@@ -213,13 +318,22 @@ export default class EstmtCreateForm extends React.Component {
       return(
         <View style={styles.page} key={i}>
           <EstmtCreatePhotoForm savePhotoInfo={this.savePhotoInfo} previousePage={this.previousePage}/>
-            <Text>test3</Text>
+        </View>
+      );
+    }
+    else if(i == 4)
+    {
+      return(
+        <View style={styles.page} key={i}>
+          <EstmtCreateCommForm saveCommInfo={this.saveCommInfo} previousePage={this.previousePage}/>
         </View>
       );
     }
   }
 }
 
+
+//StyleSheet
 const styles = StyleSheet.create({
   container: {
     flex: 1,
