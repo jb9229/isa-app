@@ -14,13 +14,13 @@ export default class EstmtCreateBasicForm extends React.Component {
     this.state={
      isReady: false,
      basicData: {
-        date: '',
+        mvDate: '',
         userName:'',
         amount: 0,
         regidentType: '',
         floor: 0,
         space: 0,
-        condition: '',
+        workCondition: '',
      },
 
      dateError: false,
@@ -29,8 +29,8 @@ export default class EstmtCreateBasicForm extends React.Component {
      userNameErrorMessage: '',
      amountError: false,
      amountErrorMessage: '',
-     residentTypeError: false,
-     residentTypeErrorMessage: '',
+     regidentTypeError: false,
+     regidentTypeErrorMessage: '',
      floorError: false,
      floorErrorMessage: '',
      spaceError: false,
@@ -68,8 +68,7 @@ export default class EstmtCreateBasicForm extends React.Component {
             <Input
               autoCorrect={false}
               onChangeText={(text) => {
-                basicData.date = text;
-                this.setState({basicData: basicData});
+                this.setState({...this.state, basicData: {...this.state.basicData, mvDate: text}});
                 let v = validate('text', text);
                 this.setState({dateError: !v[0], dateErrorMessage: v[1]});
               }}
@@ -82,8 +81,7 @@ export default class EstmtCreateBasicForm extends React.Component {
             <Input
               autoCorrect={false}
               onChangeText={(text) => {
-                basicData.userName = text;
-                this.setState({basicData: basicData});
+                this.setState({...this.state, basicData: {...this.state.basicData, userName: text}});
                 let v = validate('text', text);
                 this.setState({userNameError: !v[0], userNameErrorMessage: v[1]});
               }}
@@ -96,8 +94,7 @@ export default class EstmtCreateBasicForm extends React.Component {
             <Input
               autoCorrect={false}
               onChangeText={(text) => {
-                basicData.amount = text;
-                this.setState({basicData: basicData});
+                this.setState({...this.state, basicData: {...this.state.basicData, amount: text}});
                 let v = validate('text', text);
                 this.setState({amountError: !v[0], amountErrorMessage: v[1]});
               }}
@@ -105,22 +102,22 @@ export default class EstmtCreateBasicForm extends React.Component {
           </Item>
           <Text style={styles.errorMessage}>{this.state.amountErrorMessage}</Text>
 
-          <Item picker error={this.state.amountError} style={[styles.inputItem, this.state.amountError?styles.inputItemError:null]}>
+          <Item picker error={this.state.regidentTypeError} style={[styles.inputItem, this.state.regidentTypeError?styles.inputItemError:null]}>
             <Label>거주 형태</Label>
             <Picker
               mode="dropdown"
               iosIcon={<Icon name="ios-arrow-down-outline" />}
+              selectedValue={this.state.basicData.regidentType}
               autoCorrect={false}
               onValueChange={(itemValue, itemIndex)  => {
-                basicData.residentType = itemValue;
-                this.setState({basicData: basicData});
+                this.setState({...this.state, basicData: {...this.state.basicData, regidentType: itemValue}});
                 let v = validate('text', itemValue);
-                this.setState({residentTypeError: !v[0], residentTypeErrorMessage: v[1]});
+                this.setState({regidentTypeError: !v[0], regidentTypeErrorMessage: v[1]});
               }}
             >
-              <Picker.Item label="아파트" value="1" />
-              <Picker.Item label="빌라" value="2" />
-              <Picker.Item label="단독주택" value="3" />
+              <Picker.Item label="아파트" value="아파트" />
+              <Picker.Item label="빌라" value="빌라" />
+              <Picker.Item label="단독주택" value="단독주택" />
             </Picker>
           </Item>
           <Item stackedLabel error={this.state.floorError} style={[styles.inputItem, this.state.floorError?styles.inputItemError:null]}>
@@ -128,8 +125,7 @@ export default class EstmtCreateBasicForm extends React.Component {
             <Input
               autoCorrect={false}
               onChangeText={(text) => {
-                basicData.floor = text;
-                this.setState({basicData: basicData});
+                this.setState({...this.state, basicData: {...this.state.basicData, floor: text}});
                 let v = validate('text', text);
                 this.setState({floorError: !v[0], floorErrorMessage: v[1]});
               }}
@@ -142,8 +138,7 @@ export default class EstmtCreateBasicForm extends React.Component {
             <Input
               autoCorrect={false}
               onChangeText={(text) => {
-                basicData.space = text;
-                this.setState({basicData: basicData});
+                this.setState({...this.state, basicData: {...this.state.basicData, space: text}});
                 let v = validate('text', text);
                 this.setState({spaceError: !v[0], spaceErrorMessage: v[1]});
               }}
@@ -156,8 +151,7 @@ export default class EstmtCreateBasicForm extends React.Component {
             <Input
               autoCorrect={false}
               onChangeText={(text) => {
-                basicData.condition = text;
-                this.setState({basicData: basicData});
+                this.setState({...this.state, basicData: {...this.state.basicData, workCondition: text}});
                 let v = validate('text', text);
                 this.setState({conditionError: !v[0], conditionErrorMessage: v[1]});
               }}
@@ -190,11 +184,8 @@ export default class EstmtCreateBasicForm extends React.Component {
 
   //Method of Check Validation of submit
   isValidEstmtBasicInfo = () => {
-    const {basicData} = this.state;
-    let date = this.state.basicData.date;
 
-    var v = validate('text', date);
-    alert(date)
+    var v = validate('text', this.state.basicData.mvDate);
     if(!v[0])
     {
         this.setState({dateError: !v[0], dateErrorMessage: v[1]});
@@ -237,7 +228,7 @@ export default class EstmtCreateBasicForm extends React.Component {
     }
 
 
-    var v = validate('text', this.state.basicData.condition);
+    var v = validate('text', this.state.basicData.workCondition);
     if(!v[0])
     {
         this.setState({conditionError: !v[0], conditionErrorMessage: v[1]});

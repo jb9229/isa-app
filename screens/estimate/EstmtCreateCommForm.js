@@ -23,7 +23,15 @@ export default class EstmtCreateCommForm extends React.Component{
         <Content padder>
           <Grid>
             <Row>
-              <Textarea rowSpan={5} bordered placeholder="고객요청 사항" />
+              <Textarea
+                onChangeText={(text) =>
+                  this.setState({
+                    ...this.state,
+                    commentData: {
+                      clientAsk: text
+                    }
+                  })}
+                rowSpan={5} bordered placeholder="고객요청 사항" />
             </Row>
 
             <Row><Text style={styles.errorMessage}>{this.state.errorMessage}</Text></Row>

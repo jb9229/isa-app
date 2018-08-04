@@ -7,9 +7,10 @@ import {
   TouchableOpacity,
   View,
   Text,
+  Alert,
 } from 'react-native';
 import { ViewPager, IndicatorViewPager, PagerDotIndicator } from 'rn-viewpager';
-import { Content, Button, Icon} from 'native-base';
+import { Content, Button, Icon, Toast} from 'native-base';
 import StepIndicator from 'react-native-step-indicator';
 import EstmtCreateBasicForm from './EstmtCreateBasicForm'
 import EstmtCreateAddrForm from './EstmtCreateAddrForm'
@@ -52,33 +53,33 @@ export default class EstmtCreateForm extends React.Component {
     this.state = {
       currentPage: 0,
       estimate: {
-         date: '',
+         mvDate: '',
          userName:'',
          amount: 0,
          regidentType: '',
          floor: 0,
          space: 0,
-         condition: '',
+         workCondition: '',
 
         cmAddress : '',
         cmAddressDetail : '',
         nmAddress : '',
         nmAddressDetail : '',
 
-        airConditioner: false,
-        airConditionerType: '',
+        airconditioner: false,
+        airconditionerType: '',
         bed: false,
         bedType: '',
         drawer: false,
         drawerType: '',
         sofa: false,
-        sofatType: '',
+        sofaType: '',
         tv: false,
         tvType: '',
         piano: false,
         pianoType: '',
-        waterPurifier: false,
-        waterPurifierType: '',
+        waterpurifier: false,
+        waterpurifierType: '',
         bidet: false,
         bidetType: '',
 
@@ -154,16 +155,16 @@ export default class EstmtCreateForm extends React.Component {
   //Method of Save Basic Info
   saveEstmtBasicInfo = (data) => {
     this.setState({
-      ...state,
+      ...this.state,
       estimate: {
-        ...obj.estimate,
-        date: data.date,
+        ...this.state.estimate,
+        mvDate: data.mvDate,
         userName: data.userName,
         amount: data.amount,
         regidentType: data.regidentType,
         floor: data.floor,
         space: data.space,
-        condition: data.condition,
+        workCondition: data.workCondition,
       }
     });
 
@@ -173,9 +174,9 @@ export default class EstmtCreateForm extends React.Component {
   //Method of Save Address Info
   saveAddrInfo = (data) => {
     this.setState({
-      ...obj,
+      ...this.state,
       estimate: {
-        ...obj.estimate,
+        ...this.state.estimate,
         cmAddress : data.cmAddress,
         cmAddressDetail : data.cmAddressDetail,
         nmAddress : data.nmAddress,
@@ -189,23 +190,23 @@ export default class EstmtCreateForm extends React.Component {
   //Method of Save furniture Info
   saveFrntrInfo = (data) => {
     this.setState({
-      ...obj,
+      ...this.state,
       estimate: {
-        ...obj.estimate,
-        airConditioner: data.airConditioner,
-        airConditionerType: data.airConditionerType,
+        ...this.state.estimate,
+        airconditioner: data.airconditioner,
+        airconditionerType: data.airconditionerType,
         bed: data.bed,
         bedType: data.bedType,
         drawer: data.drawer,
         drawerType: data.drawerType,
         sofa: data.sofa,
-        sofatType: data.sofaType,
+        sofaType: data.sofaType,
         tv: data.tv,
         tvType: data.tvType,
         piano: data.piano,
         pianoType: data.pianoType,
-        waterPurifier: data.waterPurifier,
-        waterPurifierType: data.waterPurifierType,
+        waterpurifier: data.waterpurifier,
+        waterpurifierType: data.waterpurifierType,
         bidet: data.bidet,
         bidetType: data.bidetType,
       }
@@ -217,9 +218,9 @@ export default class EstmtCreateForm extends React.Component {
   //Method of Save Photo Info
   savePhotoInfo = (data) => {
     this.setState({
-      ...obj,
+      ...this.state,
       estimate: {
-        ...obj.estimate,
+        ...this.state.estimate,
         entrPhoto: data.entrPhoto,
         lrPhoto: data.lrPhoto,
         kchPhoto: data.kchPhoto,
@@ -238,10 +239,10 @@ export default class EstmtCreateForm extends React.Component {
   //Method of Save Photo Info
   saveCommInfo = (data) => {
     this.setState({
-      ...obj,
+      ...this.state,
       estimate: {
-        ...obj.estimate,
-        clientAsk: '',
+        ...this.state.estimate,
+        clientAsk: data.clientAsk,
       }
     });
 
@@ -249,42 +250,51 @@ export default class EstmtCreateForm extends React.Component {
   }
 
 
-  submit = values => {
+  submit = () => {
     // print the form values to the console
+    let values  = JSON.stringify(this.state.estimate);
 
-    console.log(values)
+    console.log(values);
+    alert(values);
   }
 
-  submitEstmt() {
-    JSON.stringify(this.state.estimate);
+  submitEstmt = () => {
+    let apiUrl = "http://moduisa.ap-northeast-2.elasticbeanstalk.com/api/v1/estimate";
+    // let apiUrl = "http://192.168.0.101/api/v1/estimate";
 
-    fetch('http://localhost:8080/api/students',
+    fetch(apiUrl,
     {   method: 'POST',
         headers: {
           Accept: 'application/json',
-          'Content-Type': 'multipart/form-data',
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify(this.state.estimate)
     })
     .then(
         res => {
-          this.loadEstmtFromServer();
-          this.props.navigation.navigate('Home');
+          if (res.ok) {
+            Toast.show({
+              text: "견적서 저장 성공",
+              buttonText: "Okay",
+              type: "success",
+              duration: 3000
+            });
+
+            this.props.compleatedCreate();
+          } else {
+            // alert(res.text().message);
+            // alert(res.json().message);
+            return res.text()
+              .then(function(err) {
+                Alert.alert(
+                  'Error',
+                  '유효하지 않은 전송 데이터 입니다, 전송 데이터 값을 확인 해 주세요.'
+                );
+              });
+          }
         }
     )
-    .catch( err => cosole.error(err))
-
-
-
-    let uriParts = uri.split('.');
-    let fileType = uri[uri.length - 1];
-
-    let formData = new FormData();
-    formData.append('photo1', {
-      uri,
-      name: `photo.${fileType}`,
-      type: `image/${fileType}`,
-    });
+    .catch( err => console.error(err))
   }
 
 

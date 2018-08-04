@@ -7,10 +7,12 @@ import HomeScreen from '../screens/HomeScreen';
 import LinksScreen from '../screens/LinksScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import EstmtCreateScreen from '../screens/estimate/EstmtCreateScreen';
+import EstmtDetailScreen from '../screens/estimate/EstmtDetailScreen';
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
   EstmtCreate: EstmtCreateScreen,
+  EstmtDetail: EstmtDetailScreen,
 });
 
 HomeStack.navigationOptions = {

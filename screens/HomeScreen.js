@@ -6,6 +6,7 @@ import {
 import {Button, Container, Content, Header, Label, Icon, Item, Text} from 'native-base';
 
 import EstmtCreateForm from './estimate/EstmtCreateForm'
+import EstmtList from './estimate/EstmtList';
 
 
 export default class HomeScreen extends React.Component {
@@ -13,12 +14,18 @@ export default class HomeScreen extends React.Component {
     header: null,
   };
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
       this.state = {
-
       }
+  }
+
+  detailedEstimate = (id) => {
+    console.log('detailedEstimate: '+id);
+    this.props.navigation.navigate('EstmtDetail', {
+      itemId: id,
+    });
   }
 
   render() {
@@ -32,13 +39,11 @@ export default class HomeScreen extends React.Component {
 
             <Button iconRight onPress={() => this.props.navigation.navigate('EstmtCreate')}>
               <Icon name='home' />
-              <Text>견적서 생성</Text>
+              <Text>견적서 추가</Text>
             </Button>
           </Item>
 
-          <Item inlineLabel last>
-            <Label>견적서 리스트</Label>
-          </Item>
+          <EstmtList detailedEstimate={this.detailedEstimate}/>
         </Content>
       </Container>
     );

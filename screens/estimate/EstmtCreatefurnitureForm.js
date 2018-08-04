@@ -10,8 +10,8 @@ export default class EstmtCreateFunitureForm extends React.Component {
 
     this.state = {
       furniture:{
-        airConditioner: false,
-        airConditionerType: '',
+        airconditioner: false,
+        airconditionerType: '',
         bed: false,
         bedType: '',
         drawer: false,
@@ -22,8 +22,8 @@ export default class EstmtCreateFunitureForm extends React.Component {
         tvType: '',
         piano: false,
         pianoType: '',
-        waterPurifier: false,
-        waterPurifierType: '',
+        waterpurifier: false,
+        waterpurifierType: '',
         bidet: false,
         bidetType: '',
       },
@@ -172,13 +172,13 @@ export default class EstmtCreateFunitureForm extends React.Component {
   //Method of Submit Info Validation
   isValidSubmitInfo = () => {
     if(this.state.furniture.bed && this.state.furniture.bedType == ''){this.setState({errorMessage: '베드 타입을 입력해 주세요!'}); return false;}
-    if(this.state.furniture.airConditioner && this.state.furniture.airConditionerType == ''){this.setState({errorMessage: '에어컨 타입을 입력해 주세요!'}); return false;}
+    if(this.state.furniture.airconditioner && this.state.furniture.airconditionerType == ''){this.setState({errorMessage: '에어컨 타입을 입력해 주세요!'}); return false;}
     if(this.state.furniture.drawer && this.state.furniture.drawerType == ''){this.setState({errorMessage: '북박이장 타입을 입력해 주세요!'}); return false;}
     if(this.state.furniture.sofa && this.state.furniture.sofaType == ''){this.setState({errorMessage: '소파 타입을 입력해 주세요!'}); return false;}
 
     if(this.state.furniture.tv && this.state.furniture.tvType == ''){this.setState({errorMessage: '티브 타입을 입력해 주세요!'}); return false;}
     if(this.state.furniture.piano && this.state.furniture.pianoType == ''){this.setState({errorMessage: '피아노 타입을 입력해 주세요!'}); return false;}
-    if(this.state.furniture.waterPurifier && this.state.furniture.waterPurifierType == ''){this.setState({errorMessage: '정수기 타입을 입력해 주세요!'}); return false;}
+    if(this.state.furniture.waterpurifier && this.state.furniture.waterpurifierType == ''){this.setState({errorMessage: '정수기 타입을 입력해 주세요!'}); return false;}
     if(this.state.furniture.bidet && this.state.furniture.bidetType == ''){this.setState({errorMessage: '비데 타입을 입력해 주세요!'}); return false;}
 
     return true;

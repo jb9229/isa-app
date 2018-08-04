@@ -1,5 +1,6 @@
 import React from 'react';
 import {View} from 'react-native';
+import {Container} from 'native-base';
 import EstmtCreateForm from './EstmtCreateForm';
 
 
@@ -11,11 +12,20 @@ export default class EstmtCreateScreen extends React.Component {
 
 
 
+  compleatedCreate = () => {
+    this.props.navigation.navigate('Home');
+  }
+
+  cancelledCreate = () => {
+
+  }
 
   //UI Render
   render() {
     return (
-      <EstmtCreateForm />
+      <Container>
+        <EstmtCreateForm compleatedCreate={this.compleatedCreate} previousePage={this.cancelledCreate}/>
+      </Container>
     )
   }
 }

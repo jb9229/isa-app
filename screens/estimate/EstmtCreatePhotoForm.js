@@ -20,6 +20,13 @@ const LOCATION_ROOM5 = "rm5";
 export default class EstmtCreatePhotoForm extends React.Component{
   state = {
     isLoadEntrPhoto: false,
+    isLoadLrPhoto: false,
+    isLoadKchPhoto: false,
+    isLoadRm1Photo: false,
+    isLoadRm2Photo: false,
+    isLoadRm3Photo: false,
+    isLoadRm4Photo: false,
+    isLoadRm5Photo: false,
     photoData: {
       entrPhoto: '',
       lrPhoto: '',
@@ -37,14 +44,86 @@ export default class EstmtCreatePhotoForm extends React.Component{
     return(
       <Container>
         <Content padder>
-          <Button primary onPress={() => this._pickImage('entr')} >
-             <Text>현관사진 추가</Text>
-          </Button>
+          <Card>
+            <CardItem cardBody>
+              <Button primary onPress={() => this._pickImage(LOCATION_ENTRANCE)} >
+                 <Text>현관사진 추가</Text>
+              </Button>
+
+              {this.state.isLoadEntrPhoto ? (<Image source={{uri: this.state.photoData.entrPhoto}}  style={{height: 200, width: null, flex: 1}}/>) : null}
+            </CardItem>
+          </Card>
+
+          <Card>
+            <CardItem cardBody>
+              <Button primary onPress={() => this._pickImage(LOCATION_LIVINGROOM)} >
+                 <Text>거실사진 추가</Text>
+              </Button>
+
+              {this.state.isLoadLrPhoto ? (<Text> {this.state.photoData.lrPhoto} </Text>) : null}
+            </CardItem>
+          </Card>
+
+          <Card>
+            <CardItem cardBody>
+              <Button primary onPress={() => this._pickImage(LOCATION_KETCHEN)} >
+                 <Text>부엌사진 추가</Text>
+              </Button>
+
+              {this.state.isLoadKchPhoto ? (<Text> {this.state.photoData.kchPhoto} </Text>) : null}
+            </CardItem>
+          </Card>
+
+          <Card>
+            <CardItem cardBody>
+              <Button primary onPress={() => this._pickImage(LOCATION_ROOM1)} >
+                 <Text>방1 추가</Text>
+              </Button>
+
+              {this.state.isLoadRm1Photo ? (<Text> {this.state.photoData.rm1Photo} </Text>) : null}
+            </CardItem>
+          </Card>
 
 
-          {this.state.isLoadEntrPhoto ? (<Image source={{uri: this.state.photoData.entrPhoto}} />) : null}
+          <Card>
+            <CardItem cardBody>
+              <Button primary onPress={() => this._pickImage(LOCATION_ROOM2)} >
+                 <Text>방2 추가</Text>
+              </Button>
 
+              {this.state.isLoadRm2Photo ? (<Text> {this.state.photoData.rm2Photo} </Text>) : null}
+            </CardItem>
+          </Card>
 
+          <Card>
+            <CardItem cardBody>
+              <Button primary onPress={() => this._pickImage(LOCATION_ROOM3)} >
+                 <Text>방3 추가</Text>
+              </Button>
+
+              {this.state.isLoadRm3Photo ? (<Text> {this.state.photoData.rm3Photo} </Text>) : null}
+            </CardItem>
+          </Card>
+
+          <Card>
+            <CardItem cardBody>
+              <Button primary onPress={() => this._pickImage(LOCATION_ROOM4)} >
+                 <Text>방4 추가</Text>
+              </Button>
+
+              {this.state.isLoadRm4Photo ? (<Text> {this.state.photoData.rm4Photo} </Text>) : null}
+            </CardItem>
+          </Card>
+
+          <Card>
+            <CardItem cardBody>
+              <Button primary onPress={() => this._pickImage(LOCATION_ROOM5)} >
+                 <Text>방5 추가</Text>
+              </Button>
+
+              {this.state.isLoadRm5Photo ? (<Text> {this.state.photoData.rm5Photo} </Text>) : null}
+            </CardItem>
+          </Card>
 
           {this._maybeRenderUploadingOverlay()}
 
@@ -87,79 +166,156 @@ export default class EstmtCreatePhotoForm extends React.Component{
 
   _pickImage = async (location) => {
     let pickerResult = await ImagePicker.launchImageLibraryAsync({
-      allowsEditing: true,
-      aspect:[4, 3],
+      allowsEditing: false,
     });
 
     this._handleImagePicked(location, pickerResult);
   };
 
   _handleImagePicked = async (location, pickerResult) => {
-    let uploadUrl;
+    let imgUrl, uploadResponse;
 
+    try {
 
-    if(!pickerResult.cancelled)
-    {
-      uploadUrl  = await uploadImageAsync(pickerResult.uri);
+      if(!pickerResult.cancelled)
+      {
+        uploadResponse  = await uploadImageAsync(pickerResult.uri);
+        imgUrl          = await uploadResponse.text();
 
-      console.log(uploadUrl);
-      switch (location) {
-        case LOCATION_ENTRANCE:
+        console.log("Server return text: "+imgUrl);
+
+        switch (location) {
+          case LOCATION_ENTRANCE:
+              this.setState({
+                ...this.state,
+                isLoadEntrPhoto: true,
+                photoData: {
+                  ...this.state.photoData,
+                  entrPhoto: imgUrl
+                }
+              });
+            break;
+          case LOCATION_LIVINGROOM:
             this.setState({
-              isLoadEntrPhoto: true,
+              ...this.state,
+              isLoadLrPhoto: true,
               photoData: {
-                entrPhoto: uploadUrl
+                ...this.state.photoData,
+                lrPhoto: imgUrl
               }
             });
-          break;
-        default:
-
+            break;
+          case LOCATION_KETCHEN:
+            this.setState({
+              ...this.state,
+              isLoadKchPhoto: true,
+              photoData: {
+                ...this.state.photoData,
+                kchPhoto: imgUrl
+              }
+            });
+            break;
+            case LOCATION_ROOM1:
+              this.setState({
+                ...this.state,
+                isLoadRm1Photo: true,
+                photoData: {
+                  ...this.state.photoData,
+                  rm1Photo: imgUrl
+                }
+              });
+            break;
+          case LOCATION_ROOM2:
+            this.setState({
+              ...this.state,
+              isLoadRm2Photo: true,
+              photoData: {
+                ...this.state.photoData,
+                rm2Photo: imgUrl
+              }
+            });
+            break;
+          case LOCATION_ROOM3:
+            this.setState({
+              ...this.state,
+              isLoadRm3Photo: true,
+              photoData: {
+                ...this.state.photoData,
+                rm3Photo: imgUrl
+              }
+            });
+            break;
+          case LOCATION_ROOM4:
+            this.setState({
+              ...this.state,
+              isLoadRm4Photo: true,
+              photoData: {
+                ...this.state.photoData,
+                rm4Photo: imgUrl
+              }
+            });
+            break;
+          case LOCATION_ROOM5:
+            this.setState({
+              ...this.state,
+              isLoadRm5Photo: true,
+              photoData: {
+                ...this.state.photoData,
+                rm5Photo: imgUrl
+              }
+            });
+            break;
+          default:
+        }
       }
-    }
+     }catch(e) {
+       alert('Upload failed, sorry :('+e.message);
+       this.setState({
+         isLoadEntrPhoto: false
+       });
+     } finally {
+     }
   };
 }
 
 
-async function uploadImageAsync(uri) {
-  let apiUrl = "http://localhost:8080/api/v1/common/image/upload";
+  async function uploadImageAsync(uri) {
+    //TODO URL properties로 빼기,
+    let apiUrl = "http://moduisa.ap-northeast-2.elasticbeanstalk.com/api/v1/common/image/upload";
 
-  // Note:
-  // Uncomment this if you want to experiment with local server
-  //
-  // if (Constants.isDevice) {
-  //   apiUrl = `https://your-ngrok-subdomain.ngrok.io/upload`;
-  // } else {
-  //   apiUrl = `http://localhost:8080/upload`
-  // }
+    // Note:
+    // Uncomment this if you want to experiment with local server
+    //
+    // if (Constants.isDevice) {
+    //   apiUrl = `https://your-ngrok-subdomain.ngrok.io/upload`;
+    // } else {
+    //   apiUrl = `http://localhost:8080/upload`
+    // }
 
-  let uriParts = uri.split('.');
-  let fileType = uri[uri.length - 1];
+    let uriParts = uri.split('.');
+    let fileType = uriParts[uriParts.length - 1];
 
-  var now = new Date();
+    let now     = new Date();
+    let nowTime = now.getTime();
 
-  let formData = new FormData();
-  // formData.append('img', uri);
-  formData.append('imgName', "estimateEntrPhoto_"+now.getMilliseconds()+".jpg");
+    let formData = new FormData();
+    formData.append('imgName', 'tobedelete');
 
-  formData.append('img', {
-    uri,
-    name: `photo.${fileType}`,
-    type: `image/${fileType}`,
-  });
-
+    formData.append('img', {
+      uri,
+      name: `isa_photo_+${nowTime}.${fileType}`,
+      type: `image/${fileType}`,
+    });
 
 
-  fetch(apiUrl,
-  {   method: 'POST',
-      contentType: false,
-      body: formData,
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'multipart/form-data',
-      }
-  })
-  .then(
-      res => console.log(res)
-  )
-  .catch( err => console.error(err))
-}
+    let options = {
+        method: 'POST',
+        body: formData,
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'multipart/form-data',
+        },
+      };
+
+    return fetch(apiUrl, options);
+  }
