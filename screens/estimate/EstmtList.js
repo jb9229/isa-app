@@ -23,8 +23,8 @@ export default class EstmtList extends React.Component {
 
   makeRemoteRequest = () => {
     const { page } = this.state;
-    // const url = `http://moduisa.ap-northeast-2.elasticbeanstalk.com/api/v1/estimates?page=${page}`;
-    const url = `http://192.168.0.102:80/api/v1/estimates?page=${page}`;
+    const url = `http://moduisa.ap-northeast-2.elasticbeanstalk.com/api/v1/estimates?page=${page}`;
+    // const url = `http://192.168.0.102:80/api/v1/estimates?page=${page}`;
     this.setState({loading: true});
 
     fetch(url)
@@ -40,6 +40,18 @@ export default class EstmtList extends React.Component {
     .catch(error => {
       this.setState({error, loading:false});
     });
+  };
+
+  handleRefresh = () => {
+    this.setState(
+      {
+        page: 0,
+        refreshing: true
+      },
+      () => {
+        this.makeRemoteRequest();
+      }
+    );
   };
 
   handleLoadMore = () => {
@@ -79,8 +91,8 @@ export default class EstmtList extends React.Component {
           renderItem={({item}) => (
             <ListItem
               button onPress={() => {this.props.detailedEstimate(item.id)}}
-              title={`${item.id}/${item.userName}`}
-              subtitle={item.mvDate}
+              title={item.userName}
+              subtitle={`${item.mvDate}, ${item.amount}톤`}
               containerStyle={{borderBottomWidth: 0}}
 
             />

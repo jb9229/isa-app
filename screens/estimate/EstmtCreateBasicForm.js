@@ -29,14 +29,6 @@ export default class EstmtCreateBasicForm extends React.Component {
      userNameErrorMessage: '',
      amountError: false,
      amountErrorMessage: '',
-     regidentTypeError: false,
-     regidentTypeErrorMessage: '',
-     floorError: false,
-     floorErrorMessage: '',
-     spaceError: false,
-     spaceErrorMessage: '',
-     conditionError: false,
-     conditionErrorMessage: '',
     }
 
   }
@@ -102,63 +94,6 @@ export default class EstmtCreateBasicForm extends React.Component {
           </Item>
           <Text style={styles.errorMessage}>{this.state.amountErrorMessage}</Text>
 
-          <Item picker error={this.state.regidentTypeError} style={[styles.inputItem, this.state.regidentTypeError?styles.inputItemError:null]}>
-            <Label>거주 형태</Label>
-            <Picker
-              mode="dropdown"
-              iosIcon={<Icon name="ios-arrow-down-outline" />}
-              selectedValue={this.state.basicData.regidentType}
-              autoCorrect={false}
-              onValueChange={(itemValue, itemIndex)  => {
-                this.setState({...this.state, basicData: {...this.state.basicData, regidentType: itemValue}});
-                let v = validate('text', itemValue);
-                this.setState({regidentTypeError: !v[0], regidentTypeErrorMessage: v[1]});
-              }}
-            >
-              <Picker.Item label="아파트" value="아파트" />
-              <Picker.Item label="빌라" value="빌라" />
-              <Picker.Item label="단독주택" value="단독주택" />
-            </Picker>
-          </Item>
-          <Item stackedLabel error={this.state.floorError} style={[styles.inputItem, this.state.floorError?styles.inputItemError:null]}>
-            <Label>층수</Label>
-            <Input
-              autoCorrect={false}
-              onChangeText={(text) => {
-                this.setState({...this.state, basicData: {...this.state.basicData, floor: text}});
-                let v = validate('text', text);
-                this.setState({floorError: !v[0], floorErrorMessage: v[1]});
-              }}
-            />
-          </Item>
-          <Text style={styles.errorMessage}>{this.state.floorErrorMessage}</Text>
-
-          <Item stackedLabel error={this.state.spaceError} style={[styles.inputItem, this.state.spaceError?styles.inputItemError:null]}>
-            <Label>평수</Label>
-            <Input
-              autoCorrect={false}
-              onChangeText={(text) => {
-                this.setState({...this.state, basicData: {...this.state.basicData, space: text}});
-                let v = validate('text', text);
-                this.setState({spaceError: !v[0], spaceErrorMessage: v[1]});
-              }}
-            />
-          </Item>
-          <Text style={styles.errorMessage}>{this.state.spaceErrorMessage}</Text>
-
-          <Item stackedLabel error={this.state.conditionError} style={[styles.inputItem, this.state.conditionError?styles.inputItemError:null]}>
-            <Label>작업조건</Label>
-            <Input
-              autoCorrect={false}
-              onChangeText={(text) => {
-                this.setState({...this.state, basicData: {...this.state.basicData, workCondition: text}});
-                let v = validate('text', text);
-                this.setState({conditionError: !v[0], conditionErrorMessage: v[1]});
-              }}
-            />
-          </Item>
-          <Text style={styles.errorMessage}>{this.state.conditionErrorMessage}</Text>
-
 
           <Grid>
             <Button large success onPress={() => this.handleSubmit()}>
@@ -175,7 +110,7 @@ export default class EstmtCreateBasicForm extends React.Component {
   handleSubmit = () => {
     let isValid = this.isValidEstmtBasicInfo();
 
-    // if(!isValid){return;}
+    if(!isValid){return;}
 
 
     this.props.saveBasicInfo(this.state.basicData);
@@ -203,35 +138,6 @@ export default class EstmtCreateBasicForm extends React.Component {
     if(!v[0])
     {
         this.setState({amountError: !v[0], amountErrorMessage: v[1]});
-        return false;
-    }
-
-    var v = validate('text', this.state.basicData.residentType);
-    if(!v[0])
-    {
-        this.setState({residentTypeError: !v[0], residentTypeErrorMessage: v[1]});
-        return false;
-    }
-
-    var v = validate('text', this.state.basicData.floor);
-    if(!v[0])
-    {
-        this.setState({floorError: !v[0], floorErrorMessage: v[1]});
-        return false;
-    }
-
-    var v = validate('text', this.state.basicData.space);
-    if(!v[0])
-    {
-        this.setState({spaceError: !v[0], spaceErrorMessage: v[1]});
-        return false;
-    }
-
-
-    var v = validate('text', this.state.basicData.workCondition);
-    if(!v[0])
-    {
-        this.setState({conditionError: !v[0], conditionErrorMessage: v[1]});
         return false;
     }
 

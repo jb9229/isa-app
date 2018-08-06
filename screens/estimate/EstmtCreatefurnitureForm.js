@@ -81,10 +81,22 @@ export default class EstmtCreateFunitureForm extends React.Component {
               </Col>
             </Row>
             <Row>
-              <Col>{furniture.bed ? (<Item regular><Input placeholder="베드 타입 기입" /></Item>) : null}</Col>
-              <Col>{furniture.airConditioner ? (<Item regular><Input placeholder="에어컨 타입 기입" /></Item>) : null}</Col>
-              <Col>{furniture.drawer ? (<Item regular><Input placeholder="북박이장 타입 기입" /></Item>) : null}</Col>
-              <Col>{furniture.sofa ? (<Item regular><Input placeholder="안마의자 타입 기입" /></Item>) : null}</Col>
+              <Col>{furniture.bed ? (<Item regular><Input
+                  placeholder="베드 타입 기입"
+                  onChangeText={(text) => {this.setState({...this.state, furniture: {...this.state.furniture, bedType: text}});}}
+                  /></Item>) : null}</Col>
+              <Col>{furniture.airConditioner ? (<Item regular><Input
+                  placeholder="에어컨 타입 기입"
+                  onChangeText={(text) => {this.setState({...this.state, furniture: {...this.state.furniture, airconditionerType: text}});}}
+                  /></Item>) : null}</Col>
+              <Col>{furniture.drawer ? (<Item regular><Input
+                  placeholder="북박이장 타입 기입"
+                  onChangeText={(text) => {this.setState({...this.state, furniture: {...this.state.furniture, drawerType: text}});}}
+                   /></Item>) : null}</Col>
+              <Col>{furniture.sofa ? (<Item regular><Input
+                  placeholder="안마의자 타입 기입"
+                  onChangeText={(text) => {this.setState({...this.state, furniture: {...this.state.furniture, sofatType: text}});}}
+                   /></Item>) : null}</Col>
             </Row>
             <Row>
               <Col>
@@ -129,10 +141,22 @@ export default class EstmtCreateFunitureForm extends React.Component {
               </Col>
             </Row>
             <Row>
-              <Col>{furniture.tv ? (<Item regular><Input placeholder="벽걸이TV 타입 기입" /></Item>) : null}</Col>
-              <Col>{furniture.piano ? (<Item regular><Input placeholder="피아노 타입 기입" /></Item>) : null}</Col>
-              <Col>{furniture.waterPurifier ? (<Item regular><Input placeholder="정수기 타입 기입" /></Item>) : null}</Col>
-              <Col>{furniture.bidet ? (<Item regular><Input placeholder="비데 타입 기입" /></Item>) : null}</Col>
+              <Col>{furniture.tv ? (<Item regular><Input
+                  placeholder="벽걸이TV 타입 기입"
+                  onChangeText={(text) => {this.setState({...this.state, furniture: {...this.state.furniture, tvType: text}});}}
+                   /></Item>) : null}</Col>
+              <Col>{furniture.piano ? (<Item regular><Input
+                  placeholder="피아노 타입 기입"
+                  onChangeText={(text) => {this.setState({...this.state, furniture: {...this.state.furniture, pianoType: text}});}}
+                  /></Item>) : null}</Col>
+              <Col>{furniture.waterPurifier ? (<Item regular><Input
+                  placeholder="정수기 타입 기입"
+                  onChangeText={(text) => {this.setState({...this.state, furniture: {...this.state.furniture, waterpurifierType: text}});}}
+                  /></Item>) : null}</Col>
+              <Col>{furniture.bidet ? (<Item regular><Input
+                  placeholder="비데 타입 기입"
+                  onChangeText={(text) => {this.setState({...this.state, furniture: {...this.state.furniture, bidetType: text}});}}
+                  /></Item>) : null}</Col>
             </Row>
             <Row><Text style={styles.errorMessage}>{this.state.errorMessage}</Text></Row>
 
@@ -189,7 +213,7 @@ export default class EstmtCreateFunitureForm extends React.Component {
   handleSubmit() {
     let isValid = this.isValidSubmitInfo();
 
-    // if(!isValid){return;}
+    if(!isValid){return;}
 
     this.props.saveFrntrInfo(this.state.furniture);
   }

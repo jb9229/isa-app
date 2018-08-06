@@ -22,7 +22,6 @@ export default class HomeScreen extends React.Component {
   }
 
   detailedEstimate = (id) => {
-    console.log('detailedEstimate: '+id);
     this.props.navigation.navigate('EstmtDetail', {
       itemId: id,
     });

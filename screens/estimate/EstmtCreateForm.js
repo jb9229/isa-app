@@ -13,14 +13,15 @@ import { ViewPager, IndicatorViewPager, PagerDotIndicator } from 'rn-viewpager';
 import { Content, Button, Icon, Toast} from 'native-base';
 import StepIndicator from 'react-native-step-indicator';
 import EstmtCreateBasicForm from './EstmtCreateBasicForm'
-import EstmtCreateAddrForm from './EstmtCreateAddrForm'
+import EstmtCreateCMInfoForm from './EstmtCreateCMInfoForm'
+import EstmtCreateNMInfoForm from './EstmtCreateNMInfoForm'
 import EstmtCreatefurnitureForm from './EstmtCreatefurnitureForm'
 import EstmtCreatePhotoForm from './EstmtCreatePhotoForm'
 import EstmtCreateCommForm from './EstmtCreateCommForm'
 
 
 //Const
-const PAGES = ['아파트/빌라/단독?, 포장이사?','예상물량/이사 예정일?/거주형태/평수/층수/','이사 주소지(현거주지 -> 이사지)','가구정보','포토'];
+const PAGES = ['아파트/빌라/단독?, 포장이사?','예상물량/이사 예정일?/거주형태/평수/층수/','현거주지','이사 주소지(현거주지 -> 이사지)','가구정보','포토'];
 
 const firstIndicatorStyles = {
   stepIndicatorSize: 30,
@@ -56,15 +57,20 @@ export default class EstmtCreateForm extends React.Component {
          mvDate: '',
          userName:'',
          amount: 0,
-         regidentType: '',
-         floor: 0,
-         space: 0,
-         workCondition: '',
 
         cmAddress : '',
         cmAddressDetail : '',
+        cmRegidentType: '',
+        cmFloor: 0,
+        cmSpace: 0,
+        cmWorkCondition: '',
+
         nmAddress : '',
         nmAddressDetail : '',
+        nmRegidentType: '',
+        nmFloor: 0,
+        nmSpace: 0,
+        nmWorkCondition: '',
 
         airconditioner: false,
         airconditionerType: '',
@@ -113,7 +119,11 @@ export default class EstmtCreateForm extends React.Component {
     return (
       <View style={styles.container}>
         <View style={styles.stepIndicator}>
-          <StepIndicator customStyles={firstIndicatorStyles} currentPosition={this.state.currentPage} labels={["기본 정보","이사지","집기 정보","포토","코멘트"]} />
+          <StepIndicator
+            customStyles={firstIndicatorStyles}
+            currentPosition={this.state.currentPage}
+            stepCount={6}
+            labels={["기본 정보","현거주지","이사지","집기 정보","포토","코멘트"]} />
         </View>
 
 
@@ -124,7 +134,6 @@ export default class EstmtCreateForm extends React.Component {
           onPageSelected={(page) => {this.setState({currentPage:page.position})}}
           peekEnabled = {true}
           horizontalScroll = {false}
-
           >
 
           {PAGES.map((page, i) => this.renderViewPagerPage(page, i))}
@@ -161,26 +170,42 @@ export default class EstmtCreateForm extends React.Component {
         mvDate: data.mvDate,
         userName: data.userName,
         amount: data.amount,
-        regidentType: data.regidentType,
-        floor: data.floor,
-        space: data.space,
-        workCondition: data.workCondition,
       }
     });
 
     this.nextPage();
   }
 
-  //Method of Save Address Info
-  saveAddrInfo = (data) => {
+  //Method of Save Current Move Info
+  saveEstmtCMInfo = (data) => {
     this.setState({
       ...this.state,
       estimate: {
         ...this.state.estimate,
         cmAddress : data.cmAddress,
         cmAddressDetail : data.cmAddressDetail,
+        cmRegidentType: data.cmRegidentType,
+        cmFloor: data.cmFloor,
+        cmSpace: data.cmSpace,
+        cmWorkCondition: data.cmWorkCondition,
+      }
+    });
+
+    this.nextPage();
+  }
+
+  //Method of Save New Move Place Info
+  saveEstmtNMInfo = (data) => {
+    this.setState({
+      ...this.state,
+      estimate: {
+        ...this.state.estimate,
         nmAddress : data.nmAddress,
-        nmAddressDetail : data.cmAddressDetail,
+        nmAddressDetail : data.nmAddressDetail,
+        nmRegidentType: data.nmRegidentType,
+        nmFloor: data.nmFloor,
+        nmSpace: data.nmSpace,
+        nmWorkCondition: data.nmWorkCondition,
       }
     });
 
@@ -260,7 +285,7 @@ export default class EstmtCreateForm extends React.Component {
 
   submitEstmt = () => {
     let apiUrl = "http://moduisa.ap-northeast-2.elasticbeanstalk.com/api/v1/estimate";
-    // let apiUrl = "http://192.168.0.101/api/v1/estimate";
+    // let apiUrl = "http://192.168.0.102/api/v1/estimate";
 
     fetch(apiUrl,
     {   method: 'POST',
@@ -270,30 +295,21 @@ export default class EstmtCreateForm extends React.Component {
         },
         body: JSON.stringify(this.state.estimate)
     })
-    .then(
-        res => {
-          if (res.ok) {
-            Toast.show({
-              text: "견적서 저장 성공",
-              buttonText: "Okay",
-              type: "success",
-              duration: 3000
-            });
+    .then(res => {
+      if (res.ok)
+      {
+        Toast.show({
+          text: "견적서 저장 성공",
+          buttonText: "Okay",
+          type: "success",
+          duration: 3000
+        });
 
-            this.props.compleatedCreate();
-          } else {
-            // alert(res.text().message);
-            // alert(res.json().message);
-            return res.text()
-              .then(function(err) {
-                Alert.alert(
-                  'Error',
-                  '유효하지 않은 전송 데이터 입니다, 전송 데이터 값을 확인 해 주세요.'
-                );
-              });
-          }
-        }
-    )
+        this.props.compleatedCreate();
+      }else{
+        Alert.alert('Error','유효하지 않은 전송 데이터 입니다, 전송 데이터 값을 확인 해 주세요('+res.status+', '+res.text()+')'); return;
+      }
+    })
     .catch( err => console.error(err))
   }
 
@@ -311,7 +327,7 @@ export default class EstmtCreateForm extends React.Component {
     {
       return(
         <View style={styles.page} key={i}>
-          <EstmtCreateAddrForm saveAddrInfo={this.saveAddrInfo} previousePage={this.previousePage} />
+          <EstmtCreateCMInfoForm saveCMInfo={this.saveEstmtCMInfo} previousePage={this.previousePage} />
         </View>
       );
     }
@@ -319,7 +335,7 @@ export default class EstmtCreateForm extends React.Component {
     {
       return(
         <View style={styles.page} key={i}>
-          <EstmtCreatefurnitureForm saveFrntrInfo={this.saveFrntrInfo} previousePage={this.previousePage}/>
+          <EstmtCreateNMInfoForm saveNMInfo={this.saveEstmtNMInfo} previousePage={this.previousePage} />
         </View>
       );
     }
@@ -327,11 +343,19 @@ export default class EstmtCreateForm extends React.Component {
     {
       return(
         <View style={styles.page} key={i}>
-          <EstmtCreatePhotoForm savePhotoInfo={this.savePhotoInfo} previousePage={this.previousePage}/>
+          <EstmtCreatefurnitureForm saveFrntrInfo={this.saveFrntrInfo} previousePage={this.previousePage}/>
         </View>
       );
     }
     else if(i == 4)
+    {
+      return(
+        <View style={styles.page} key={i}>
+          <EstmtCreatePhotoForm savePhotoInfo={this.savePhotoInfo} previousePage={this.previousePage}/>
+        </View>
+      );
+    }
+    else if(i == 5)
     {
       return(
         <View style={styles.page} key={i}>

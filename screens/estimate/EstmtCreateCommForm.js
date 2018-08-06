@@ -60,7 +60,7 @@ export default class EstmtCreateCommForm extends React.Component{
   handleSubmit() {
     let isValid = this.isValidSubmitInfo();
 
-    // if(!isValid){return;}
+    if(!isValid){return;}
 
     this.props.saveCommInfo(this.state.commentData);
   }
