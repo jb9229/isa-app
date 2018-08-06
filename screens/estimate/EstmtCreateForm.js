@@ -1,16 +1,7 @@
 import React from 'react';
-import {
-  Image,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-  Text,
-  Alert,
-} from 'react-native';
+import {Dimensions, Image, Platform, ScrollView, StyleSheet, TouchableOpacity, View, Text, Alert} from 'react-native';
 import { ViewPager, IndicatorViewPager, PagerDotIndicator } from 'rn-viewpager';
-import { Content, Button, Icon, Toast} from 'native-base';
+import { Container, Content, Button, Form, Icon, Toast} from 'native-base';
 import StepIndicator from 'react-native-step-indicator';
 import EstmtCreateBasicForm from './EstmtCreateBasicForm'
 import EstmtCreateCMInfoForm from './EstmtCreateCMInfoForm'
@@ -115,31 +106,32 @@ export default class EstmtCreateForm extends React.Component {
 
   //Estimate Redux Form
   render(){
-    const { handleSubmit } = this.props
+    var {height, width} = Dimensions.get('window');
+    const { handleSubmit } = this.props;
     return (
-      <View style={styles.container}>
-        <View style={styles.stepIndicator}>
-          <StepIndicator
-            customStyles={firstIndicatorStyles}
-            currentPosition={this.state.currentPage}
-            stepCount={6}
-            labels={["기본 정보","현거주지","이사지","집기 정보","포토","코멘트"]} />
-        </View>
+      <Container>
+        <Content>
+          <View style={styles.stepIndicator}>
+            <StepIndicator
+              customStyles={firstIndicatorStyles}
+              currentPosition={this.state.currentPage}
+              stepCount={6}
+              labels={["기본 정보","현거주지","이사지","집기 정보","포토","코멘트"]} />
+          </View>
 
+          <ViewPager
+            style={{flex: 1, flexGrow:1, width: width, height: height-200}}
+            ref={(viewPager) => {this.viewPager = viewPager}}
+            onPageSelected={(page) => {this.setState({currentPage:page.position})}}
+            peekEnabled = {true}
+            horizontalScroll = {false}
+            >
 
+            {PAGES.map((page, i) => this.renderViewPagerPage(page, i))}
 
-        <ViewPager
-          style={{flexGrow:1}}
-          ref={(viewPager) => {this.viewPager = viewPager}}
-          onPageSelected={(page) => {this.setState({currentPage:page.position})}}
-          peekEnabled = {true}
-          horizontalScroll = {false}
-          >
-
-          {PAGES.map((page, i) => this.renderViewPagerPage(page, i))}
-        </ViewPager>
-
-      </View>
+          </ViewPager>
+        </Content>
+      </Container>
     )
   }
 
@@ -319,7 +311,7 @@ export default class EstmtCreateForm extends React.Component {
     {
       return(
         <View style={styles.page} key={i} >
-          <EstmtCreateBasicForm saveBasicInfo={this.saveEstmtBasicInfo} />
+           <EstmtCreateBasicForm saveBasicInfo={this.saveEstmtBasicInfo} />
         </View>
       );
     }
@@ -374,15 +366,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
   },
   stepIndicator: {
-    marginVertical:50,
+    marginVertical:20,
   },
   page: {
-    flex:2,
-    justifyContent:'center',
-    alignItems:'center'
-  },
-  address: {
-    width: 300,
-    height: 300,
+    flex: 1,
   }
 });

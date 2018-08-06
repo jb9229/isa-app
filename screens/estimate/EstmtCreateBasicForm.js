@@ -1,7 +1,7 @@
 import React from 'react';
 import Expo from 'expo';
-import {StyleSheet, View} from 'react-native';
-import {Container, Grid, Item, Label, Input, Header, Body, Content, Title, Button, Text, Picker, Icon, Textarea } from 'native-base';
+import {StyleSheet, KeyboardAvoidingView, ScrollView } from 'react-native';
+import {Container, Content, Grid, Form, Header, Item, Label, Input, Icon, Textarea, Title, Button, Text, Picker} from 'native-base';
 import {validate} from '../../utils/validation'
 
 
@@ -53,55 +53,54 @@ export default class EstmtCreateBasicForm extends React.Component {
 
 
     return (
-      <Container>
-        <Content padder>
-          <Item floatingLabel error={this.state.dateError} style={[styles.inputItem, this.state.dateError?styles.inputItemError:null]}>
-            <Label>이사 예정일</Label>
-            <Input
-              autoCorrect={false}
-              onChangeText={(text) => {
-                this.setState({...this.state, basicData: {...this.state.basicData, mvDate: text}});
-                let v = validate('text', text);
-                this.setState({dateError: !v[0], dateErrorMessage: v[1]});
-              }}
-            />
-          </Item>
-          <Text style={styles.errorMessage}>{this.state.dateErrorMessage}</Text>
+      <Form>
+        <Item stackedLabel error={this.state.dateError} style={[styles.inputItem, this.state.dateError?styles.inputItemError:null]}>
+          <Label>이사 예정일</Label>
+          <Input
+            autoCorrect={false}
+            onChangeText={(text) => {
+              this.setState({...this.state, basicData: {...this.state.basicData, mvDate: text}});
+              let v = validate('text', text);
+              this.setState({dateError: !v[0], dateErrorMessage: v[1]});
+            }}
+          />
+        </Item>
+        <Text style={styles.errorMessage}>{this.state.dateErrorMessage}</Text>
 
-          <Item floatingLabel error={this.state.userNameError} style={[styles.inputItem, this.state.userNameError?styles.inputItemError:null]}>
-            <Label>고객명</Label>
-            <Input
-              autoCorrect={false}
-              onChangeText={(text) => {
-                this.setState({...this.state, basicData: {...this.state.basicData, userName: text}});
-                let v = validate('text', text);
-                this.setState({userNameError: !v[0], userNameErrorMessage: v[1]});
-              }}
-            />
-          </Item>
-          <Text style={styles.errorMessage}>{this.state.userNameErrorMessage}</Text>
+        <Item stackedLabel error={this.state.userNameError} style={[styles.inputItem, this.state.userNameError?styles.inputItemError:null]}>
+          <Label>고객명</Label>
+          <Input
+            autoCorrect={false}
+            onChangeText={(text) => {
+              this.setState({...this.state, basicData: {...this.state.basicData, userName: text}});
+              let v = validate('text', text);
+              this.setState({userNameError: !v[0], userNameErrorMessage: v[1]});
+            }}
+          />
+        </Item>
+        <Text style={styles.errorMessage}>{this.state.userNameErrorMessage}</Text>
 
-          <Item floatingLabel error={this.state.amountError} style={[styles.inputItem, this.state.amountError?styles.inputItemError:null]}>
-            <Label>예상물량</Label>
-            <Input
-              autoCorrect={false}
-              onChangeText={(text) => {
-                this.setState({...this.state, basicData: {...this.state.basicData, amount: text}});
-                let v = validate('text', text);
-                this.setState({amountError: !v[0], amountErrorMessage: v[1]});
-              }}
-            />
-          </Item>
-          <Text style={styles.errorMessage}>{this.state.amountErrorMessage}</Text>
+        <Item stackedLabel error={this.state.amountError} style={[styles.inputItem, this.state.amountError?styles.inputItemError:null]}>
+          <Label>예상물량</Label>
+          <Input
+            autoCorrect={false}
+            keyboardType='numeric'
+            onChangeText={(text) => {
+              this.setState({...this.state, basicData: {...this.state.basicData, amount: text}});
+              let v = validate('text', text);
+              this.setState({amountError: !v[0], amountErrorMessage: v[1]});
+            }}
+          />
+        </Item>
+        <Text style={styles.errorMessage}>{this.state.amountErrorMessage}</Text>
 
 
-          <Grid>
-            <Button large success onPress={() => this.handleSubmit()}>
-              <Text>다음</Text>
-            </Button>
-          </Grid>
-        </Content>
-      </Container>
+        <Grid>
+          <Button large success onPress={() => this.handleSubmit()}>
+            <Text>다음</Text>
+          </Button>
+        </Grid>
+      </Form>
     )
   }
 
@@ -149,6 +148,10 @@ export default class EstmtCreateBasicForm extends React.Component {
 const styles = StyleSheet.create({
   errorMessage: {
     color: 'red'
+  },
+  form: {
+    flex: 1,
+    justifyContent: 'space-between',
   },
   inputItem: {
 

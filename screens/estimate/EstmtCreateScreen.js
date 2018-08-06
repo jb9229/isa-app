@@ -23,9 +23,7 @@ export default class EstmtCreateScreen extends React.Component {
   //UI Render
   render() {
     return (
-      <Container>
-        <EstmtCreateForm compleatedCreate={this.compleatedCreate} previousePage={this.cancelledCreate}/>
-      </Container>
+      <EstmtCreateForm compleatedCreate={this.compleatedCreate} previousePage={this.cancelledCreate}/>
     )
   }
 }
