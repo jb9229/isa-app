@@ -6,7 +6,7 @@ import {ActivityIndicator,
   StyleSheet,
   View,} from 'react-native'
 import Exponent, { Constants, ImagePicker} from 'expo';
-import {Card, CardItem, Container, Grid, Item, Label, Input, Header, Body, Content, Title, Button, Text, Picker, Textarea } from 'native-base';
+import {Body, Content, Card, CardItem, Container, Col, Form, Grid, Item, Label, Input, Header, Title, Button, Text, Picker, Textarea } from 'native-base';
 
 const LOCATION_ENTRANCE = "entr";
 const LOCATION_LIVINGROOM = "lv";
@@ -42,103 +42,102 @@ export default class EstmtCreatePhotoForm extends React.Component{
 
   render() {
     return(
-      <Container>
-        <Content padder>
-          <Card>
-            <CardItem cardBody>
-              <Button primary onPress={() => this._pickImage(LOCATION_ENTRANCE)} >
-                 <Text>현관사진 추가</Text>
-              </Button>
+      <Content>
+        <Card>
+          <CardItem header button onPress={() => this._pickImage(LOCATION_ENTRANCE)}>
+            <Text>현관사진 추가</Text>
+          </CardItem>
 
-              {this.state.isLoadEntrPhoto ? (<Image source={{uri: this.state.photoData.entrPhoto}}  style={{height: 200, width: null, flex: 1}}/>) : null}
-            </CardItem>
-          </Card>
+          <CardItem bordered>
+            <Body>
+              {this.state.isLoadEntrPhoto ? (<Text> {this.state.photoData.entrPhoto} </Text>) : null}
+            </Body>
+          </CardItem>
+        </Card>
 
-          <Card>
-            <CardItem cardBody>
-              <Button primary onPress={() => this._pickImage(LOCATION_LIVINGROOM)} >
-                 <Text>거실사진 추가</Text>
-              </Button>
+        <Card>
+          <CardItem cardBody>
+            <Button primary onPress={() => this._pickImage(LOCATION_LIVINGROOM)} >
+               <Text>거실사진 추가</Text>
+            </Button>
 
-              {this.state.isLoadLrPhoto ? (<Text> {this.state.photoData.lrPhoto} </Text>) : null}
-            </CardItem>
-          </Card>
+            {this.state.isLoadLrPhoto ? (<Text> {this.state.photoData.lrPhoto} </Text>) : null}
+          </CardItem>
+        </Card>
 
-          <Card>
-            <CardItem cardBody>
-              <Button primary onPress={() => this._pickImage(LOCATION_KETCHEN)} >
-                 <Text>부엌사진 추가</Text>
-              </Button>
+        <Card>
+          <CardItem cardBody>
+            <Button primary onPress={() => this._pickImage(LOCATION_KETCHEN)} >
+               <Text>부엌사진 추가</Text>
+            </Button>
 
-              {this.state.isLoadKchPhoto ? (<Text> {this.state.photoData.kchPhoto} </Text>) : null}
-            </CardItem>
-          </Card>
+            {this.state.isLoadKchPhoto ? (<Text> {this.state.photoData.kchPhoto} </Text>) : null}
+          </CardItem>
+        </Card>
 
-          <Card>
-            <CardItem cardBody>
-              <Button primary onPress={() => this._pickImage(LOCATION_ROOM1)} >
-                 <Text>방1 추가</Text>
-              </Button>
+        <Card>
+          <CardItem cardBody>
+            <Button primary onPress={() => this._pickImage(LOCATION_ROOM1)} >
+               <Text>방1사진 추가</Text>
+            </Button>
 
-              {this.state.isLoadRm1Photo ? (<Text> {this.state.photoData.rm1Photo} </Text>) : null}
-            </CardItem>
-          </Card>
+            {this.state.isLoadRm1Photo ? (<Text> {this.state.photoData.rm1Photo} </Text>) : null}
+          </CardItem>
+        </Card>
 
+        <Card>
+          <CardItem cardBody>
+            <Button primary onPress={() => this._pickImage(LOCATION_ROOM2)} >
+               <Text>방2사진 추가</Text>
+            </Button>
 
-          <Card>
-            <CardItem cardBody>
-              <Button primary onPress={() => this._pickImage(LOCATION_ROOM2)} >
-                 <Text>방2 추가</Text>
-              </Button>
+            {this.state.isLoadRm2Photo ? (<Text> {this.state.photoData.rm2Photo} </Text>) : null}
+          </CardItem>
+        </Card>
 
-              {this.state.isLoadRm2Photo ? (<Text> {this.state.photoData.rm2Photo} </Text>) : null}
-            </CardItem>
-          </Card>
+        <Card>
+          <CardItem cardBody>
+            <Button primary onPress={() => this._pickImage(LOCATION_ROOM3)} >
+               <Text>방3사진 추가</Text>
+            </Button>
 
-          <Card>
-            <CardItem cardBody>
-              <Button primary onPress={() => this._pickImage(LOCATION_ROOM3)} >
-                 <Text>방3 추가</Text>
-              </Button>
+            {this.state.isLoadRm3Photo ? (<Text> {this.state.photoData.rm3Photo} </Text>) : null}
+          </CardItem>
+        </Card>
 
-              {this.state.isLoadRm3Photo ? (<Text> {this.state.photoData.rm3Photo} </Text>) : null}
-            </CardItem>
-          </Card>
+        <Card>
+          <CardItem cardBody>
+            <Button primary onPress={() => this._pickImage(LOCATION_ROOM4)} >
+               <Text>방4사진 추가</Text>
+            </Button>
 
-          <Card>
-            <CardItem cardBody>
-              <Button primary onPress={() => this._pickImage(LOCATION_ROOM4)} >
-                 <Text>방4 추가</Text>
-              </Button>
+            {this.state.isLoadRm4Photo ? (<Text> {this.state.photoData.rm4Photo} </Text>) : null}
+          </CardItem>
+        </Card>
 
-              {this.state.isLoadRm4Photo ? (<Text> {this.state.photoData.rm4Photo} </Text>) : null}
-            </CardItem>
-          </Card>
+        <Card>
+          <CardItem cardBody>
+            <Button primary onPress={() => this._pickImage(LOCATION_ROOM5)} >
+               <Text>방5사진 추가</Text>
+            </Button>
 
-          <Card>
-            <CardItem cardBody>
-              <Button primary onPress={() => this._pickImage(LOCATION_ROOM5)} >
-                 <Text>방5 추가</Text>
-              </Button>
+            {this.state.isLoadRm5Photo ? (<Text> {this.state.photoData.rm5Photo} </Text>) : null}
+          </CardItem>
+        </Card>
 
-              {this.state.isLoadRm5Photo ? (<Text> {this.state.photoData.rm5Photo} </Text>) : null}
-            </CardItem>
-          </Card>
-
-          {this._maybeRenderUploadingOverlay()}
-
-          <StatusBar barStyle="default" />
-
-          <Grid>
-            <Button large  primary onPress={() => this.props.previousePage()}>
+        <Grid style={{marginTop: 100}}>
+          <Col>
+            <Button block  primary onPress={() => this.props.previousePage()}>
               <Text>이전</Text>
             </Button>
-            <Button large success onPress={() => this.handleSubmit()}>
+          </Col>
+          <Col>
+            <Button block success onPress={() => this.handleSubmit()}>
               <Text>다음</Text>
             </Button>
-          </Grid>
+          </Col>
+        </Grid>
         </Content>
-      </Container>
     );
   }
 

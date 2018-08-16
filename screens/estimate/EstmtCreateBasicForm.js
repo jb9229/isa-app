@@ -60,7 +60,7 @@ export default class EstmtCreateBasicForm extends React.Component {
             autoCorrect={false}
             onChangeText={(text) => {
               this.setState({...this.state, basicData: {...this.state.basicData, mvDate: text}});
-              let v = validate('text', text);
+              let v = validate('text', text, true);
               this.setState({dateError: !v[0], dateErrorMessage: v[1]});
             }}
           />
@@ -73,7 +73,7 @@ export default class EstmtCreateBasicForm extends React.Component {
             autoCorrect={false}
             onChangeText={(text) => {
               this.setState({...this.state, basicData: {...this.state.basicData, userName: text}});
-              let v = validate('text', text);
+              let v = validate('text', text, true);
               this.setState({userNameError: !v[0], userNameErrorMessage: v[1]});
             }}
           />
@@ -81,13 +81,13 @@ export default class EstmtCreateBasicForm extends React.Component {
         <Text style={styles.errorMessage}>{this.state.userNameErrorMessage}</Text>
 
         <Item stackedLabel error={this.state.amountError} style={[styles.inputItem, this.state.amountError?styles.inputItemError:null]}>
-          <Label>예상물량</Label>
+          <Label>예상물량(톤)</Label>
           <Input
             autoCorrect={false}
             keyboardType='numeric'
             onChangeText={(text) => {
               this.setState({...this.state, basicData: {...this.state.basicData, amount: text}});
-              let v = validate('text', text);
+              let v = validate('decimal', text, true);
               this.setState({amountError: !v[0], amountErrorMessage: v[1]});
             }}
           />
@@ -95,11 +95,11 @@ export default class EstmtCreateBasicForm extends React.Component {
         <Text style={styles.errorMessage}>{this.state.amountErrorMessage}</Text>
 
 
-        <Grid>
-          <Button large success onPress={() => this.handleSubmit()}>
-            <Text>다음</Text>
-          </Button>
-        </Grid>
+
+        <Button block success onPress={() => this.handleSubmit()} style={{marginTop: 100}}>
+          <Text>다음</Text>
+        </Button>
+
       </Form>
     )
   }
@@ -119,21 +119,21 @@ export default class EstmtCreateBasicForm extends React.Component {
   //Method of Check Validation of submit
   isValidEstmtBasicInfo = () => {
 
-    var v = validate('text', this.state.basicData.mvDate);
+    var v = validate('text', this.state.basicData.mvDate, true);
     if(!v[0])
     {
         this.setState({dateError: !v[0], dateErrorMessage: v[1]});
         return false;
     }
 
-    var v = validate('text', this.state.basicData.userName);
+    var v = validate('text', this.state.basicData.userName, true);
     if(!v[0])
     {
         this.setState({userNameError: !v[0], userNameErrorMessage: v[1]});
         return false;
     }
 
-    var v = validate('text', this.state.basicData.amount);
+    var v = validate('decimal', this.state.basicData.amount, true);
     if(!v[0])
     {
         this.setState({amountError: !v[0], amountErrorMessage: v[1]});

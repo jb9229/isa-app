@@ -17,7 +17,7 @@ export default class EstmtCreateFunitureForm extends React.Component {
         drawer: false,
         drawerType: '',
         sofa: false,
-        sofatType: '',
+        sofaType: '',
         tv: false,
         tvType: '',
         piano: false,
@@ -43,19 +43,19 @@ export default class EstmtCreateFunitureForm extends React.Component {
                 <TouchableHighlight onPress={() => {this._onPressButton('bed')}}>
                   <Icon.FontAwesome
                     name={'bed'}
-                    size={86}
+                    size={96}
                     style={{ marginBottom: -3 }}
                     color={this.state.furniture.bed ? Colors.tabIconSelected : Colors.tabIconDefault}
                   />
                 </TouchableHighlight>
               </Col>
               <Col>
-                <TouchableHighlight onPress={() => {this._onPressButton('airConditioner')}}>
+                <TouchableHighlight onPress={() => {this._onPressButton('airconditioner')}}>
                   <Icon.MaterialCommunityIcons
                     name={'air-conditioner'}
-                    size={86}
+                    size={96}
                     style={{ marginBottom: -3 }}
-                    color={this.state.furniture.airConditioner ? Colors.tabIconSelected : Colors.tabIconDefault}
+                    color={this.state.furniture.airconditioner ? Colors.tabIconSelected : Colors.tabIconDefault}
                   />
                 </TouchableHighlight>
               </Col>
@@ -63,39 +63,25 @@ export default class EstmtCreateFunitureForm extends React.Component {
                 <TouchableHighlight onPress={() => {this._onPressButton('drawer')}}>
                   <Icon.SimpleLineIcons
                     name={'drawer'}
-                    size={86}
+                    size={96}
                     style={{ marginBottom: -3 }}
                     color={this.state.furniture.drawer ? Colors.tabIconSelected : Colors.tabIconDefault}
-                  />
-                </TouchableHighlight>
-              </Col>
-              <Col>
-                <TouchableHighlight onPress={() => {this._onPressButton('sofa')}}>
-                  <Icon.MaterialCommunityIcons
-                    name={'sofa'}
-                    size={86}
-                    style={{ marginBottom: -3 }}
-                    color={this.state.furniture.sofa ? Colors.tabIconSelected : Colors.tabIconDefault}
                   />
                 </TouchableHighlight>
               </Col>
             </Row>
             <Row>
               <Col>{furniture.bed ? (<Item regular><Input
-                  placeholder="베드 타입 기입"
+                  placeholder="베드 타입"
                   onChangeText={(text) => {this.setState({...this.state, furniture: {...this.state.furniture, bedType: text}});}}
                   /></Item>) : null}</Col>
-              <Col>{furniture.airConditioner ? (<Item regular><Input
-                  placeholder="에어컨 타입 기입"
+                <Col>{furniture.airconditioner ? (<Item regular><Input
+                  placeholder="에어컨 타입"
                   onChangeText={(text) => {this.setState({...this.state, furniture: {...this.state.furniture, airconditionerType: text}});}}
                   /></Item>) : null}</Col>
               <Col>{furniture.drawer ? (<Item regular><Input
-                  placeholder="북박이장 타입 기입"
+                  placeholder="북박이장 타입"
                   onChangeText={(text) => {this.setState({...this.state, furniture: {...this.state.furniture, drawerType: text}});}}
-                   /></Item>) : null}</Col>
-              <Col>{furniture.sofa ? (<Item regular><Input
-                  placeholder="안마의자 타입 기입"
-                  onChangeText={(text) => {this.setState({...this.state, furniture: {...this.state.furniture, sofatType: text}});}}
                    /></Item>) : null}</Col>
             </Row>
             <Row>
@@ -103,7 +89,7 @@ export default class EstmtCreateFunitureForm extends React.Component {
                 <TouchableHighlight onPress={() => {this._onPressButton('tv')}}>
                   <Icon.Feather
                     name={'tv'}
-                    size={86}
+                    size={96}
                     style={{ marginBottom: -3 }}
                     color={this.state.furniture.tv ? Colors.tabIconSelected : Colors.tabIconDefault}
                   />
@@ -113,19 +99,45 @@ export default class EstmtCreateFunitureForm extends React.Component {
                 <TouchableHighlight onPress={() => {this._onPressButton('piano')}}>
                   <Icon.MaterialCommunityIcons
                     name={'piano'}
-                    size={86}
+                    size={96}
                     style={{ marginBottom: -3 }}
                     color={this.state.furniture.piano ? Colors.tabIconSelected : Colors.tabIconDefault}
                   />
                 </TouchableHighlight>
               </Col>
               <Col>
-                <TouchableHighlight onPress={() => {this._onPressButton('waterPurifier')}}>
+                <TouchableHighlight onPress={() => {this._onPressButton('waterpurifier')}}>
                   <Icon.MaterialCommunityIcons
                     name={'cup-water'}
-                    size={86}
+                    size={96}
                     style={{ marginBottom: -3 }}
-                    color={this.state.furniture.waterPurifier ? Colors.tabIconSelected : Colors.tabIconDefault}
+                    color={this.state.furniture.waterpurifier ? Colors.tabIconSelected : Colors.tabIconDefault}
+                  />
+                </TouchableHighlight>
+              </Col>
+            </Row>
+            <Row>
+              <Col>{furniture.tv ? (<Item regular><Input
+                  placeholder="TV 타입"
+                  onChangeText={(text) => {this.setState({...this.state, furniture: {...this.state.furniture, tvType: text}});}}
+                   /></Item>) : null}</Col>
+              <Col>{furniture.piano ? (<Item regular><Input
+                  placeholder="피아노 타입"
+                  onChangeText={(text) => {this.setState({...this.state, furniture: {...this.state.furniture, pianoType: text}});}}
+                  /></Item>) : null}</Col>
+              <Col>{furniture.waterpurifier ? (<Item regular><Input
+                  placeholder="정수기 타입"
+                  onChangeText={(text) => {this.setState({...this.state, furniture: {...this.state.furniture, waterpurifierType: text}});}}
+                  /></Item>) : null}</Col>
+            </Row>
+            <Row>
+              <Col>
+                <TouchableHighlight onPress={() => {this._onPressButton('sofa')}}>
+                  <Icon.MaterialCommunityIcons
+                    name={'sofa'}
+                    size={96}
+                    style={{ marginBottom: -3 }}
+                    color={this.state.furniture.sofa ? Colors.tabIconSelected : Colors.tabIconDefault}
                   />
                 </TouchableHighlight>
               </Col>
@@ -133,42 +145,39 @@ export default class EstmtCreateFunitureForm extends React.Component {
                 <TouchableHighlight onPress={() => {this._onPressButton('bidet')}}>
                   <Icon.MaterialIcons
                     name={'wc'}
-                    size={86}
+                    size={96}
                     style={{ marginBottom: -3 }}
                     color={this.state.furniture.bidet ? Colors.tabIconSelected : Colors.tabIconDefault}
                   />
                 </TouchableHighlight>
               </Col>
+              <Col></Col>
             </Row>
             <Row>
-              <Col>{furniture.tv ? (<Item regular><Input
-                  placeholder="벽걸이TV 타입 기입"
-                  onChangeText={(text) => {this.setState({...this.state, furniture: {...this.state.furniture, tvType: text}});}}
+              <Col>{furniture.sofa ? (<Item regular><Input
+                  placeholder="안마의자 타입"
+                  onChangeText={(text) => {this.setState({...this.state, furniture: {...this.state.furniture, sofaType: text}});}}
                    /></Item>) : null}</Col>
-              <Col>{furniture.piano ? (<Item regular><Input
-                  placeholder="피아노 타입 기입"
-                  onChangeText={(text) => {this.setState({...this.state, furniture: {...this.state.furniture, pianoType: text}});}}
-                  /></Item>) : null}</Col>
-              <Col>{furniture.waterPurifier ? (<Item regular><Input
-                  placeholder="정수기 타입 기입"
-                  onChangeText={(text) => {this.setState({...this.state, furniture: {...this.state.furniture, waterpurifierType: text}});}}
-                  /></Item>) : null}</Col>
               <Col>{furniture.bidet ? (<Item regular><Input
-                  placeholder="비데 타입 기입"
+                  placeholder="비데 타입"
                   onChangeText={(text) => {this.setState({...this.state, furniture: {...this.state.furniture, bidetType: text}});}}
                   /></Item>) : null}</Col>
+              <Col></Col>
             </Row>
             <Row><Text style={styles.errorMessage}>{this.state.errorMessage}</Text></Row>
+          </Grid>
 
-            <Row>
-              <Button large  primary onPress={() => this.props.previousePage()}>
+          <Grid style={{marginTop: 100}}>
+            <Col>
+              <Button block  primary onPress={() => this.props.previousePage()}>
                 <Text>이전</Text>
               </Button>
-
-              <Button large success onPress={() => this.handleSubmit()}>
+            </Col>
+            <Col>
+              <Button block success onPress={() => this.handleSubmit()}>
                 <Text>다음</Text>
               </Button>
-            </Row>
+            </Col>
           </Grid>
         </Content>
       </Container>
@@ -179,13 +188,13 @@ export default class EstmtCreateFunitureForm extends React.Component {
     const {furniture} = this.state;
 
     if(type == 'bed'){furniture.bed = !this.state.furniture.bed;}
-    if(type == 'airConditioner'){furniture.airConditioner = !this.state.furniture.airConditioner;}
+    if(type == 'airconditioner'){furniture.airconditioner = !this.state.furniture.airconditioner;}
     if(type == 'drawer'){furniture.drawer = !this.state.furniture.drawer;}
     if(type == 'sofa'){furniture.sofa = !this.state.furniture.sofa;}
 
     if(type == 'tv'){furniture.tv = !this.state.furniture.tv;}
     if(type == 'piano'){furniture.piano = !this.state.furniture.piano;}
-    if(type == 'waterPurifier'){furniture.waterPurifier = !this.state.furniture.waterPurifier;}
+    if(type == 'waterpurifier'){furniture.waterpurifier = !this.state.furniture.waterpurifier;}
     if(type == 'bidet'){furniture.bidet = !this.state.furniture.bidet;}
 
     this.setState({

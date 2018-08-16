@@ -1,6 +1,6 @@
 import React from 'react';
 import {StyleSheet, View, WebView, Alert} from 'react-native';
-import {Button, Container, Content, Grid, Label, Input, Icon, Item, Text, Picker} from 'native-base';
+import {Button, Container, Content, Col, Grid, Label, Input, Icon, Item, Text, Picker} from 'native-base';
 import {validate} from '../../utils/validation';
 
 
@@ -22,7 +22,7 @@ export default class EstmtCreateCMInfoForm extends React.Component {
       cmData: {
         cmAddress : '',
         cmAddressDetail : '',
-        cmRegidentType: '',
+        cmRegidentType: '아파트',
         cmFloor: 0,
         cmSpace: 0,
         cmWorkCondition: '',
@@ -40,7 +40,7 @@ export default class EstmtCreateCMInfoForm extends React.Component {
           <Content padder>
             <WebView
                 source={{uri: 'https://jb9229.github.io/postcode/'}}
-                style={{flex: 1, width: 300, height: 400}}
+                style={{flex: 1, height: 370}}
                 mixedContentMode='always'
                 onMessage={(event)=> this.savePostData(event.nativeEvent.data) }
             />
@@ -55,7 +55,7 @@ export default class EstmtCreateCMInfoForm extends React.Component {
                 autoCorrect={false}
                 onValueChange={(itemValue, itemIndex)  => {
                   this.setState({...this.state, cmData: {...this.state.cmData, cmRegidentType: itemValue}});
-                  let v = validate('text', itemValue);
+                  let v = validate('text', itemValue, true);
                   this.setState({regidentTypeError: !v[0], regidentTypeErrorMessage: v[1]});
                 }}
               >
@@ -68,9 +68,10 @@ export default class EstmtCreateCMInfoForm extends React.Component {
               <Label>층수</Label>
               <Input
                 autoCorrect={false}
+                keyboardType='numeric'
                 onChangeText={(text) => {
                   this.setState({...this.state, cmData: {...this.state.cmData, cmFloor: text}});
-                  let v = validate('text', text);
+                  let v = validate('decimal', text, true);
                   this.setState({floorError: !v[0], floorErrorMessage: v[1]});
                 }}
               />
@@ -81,9 +82,10 @@ export default class EstmtCreateCMInfoForm extends React.Component {
               <Label>평수</Label>
               <Input
                 autoCorrect={false}
+                keyboardType='numeric'
                 onChangeText={(text) => {
                   this.setState({...this.state, cmData: {...this.state.cmData, cmSpace: text}});
-                  let v = validate('text', text);
+                  let v = validate('decimal', text, true);
                   this.setState({spaceError: !v[0], spaceErrorMessage: v[1]});
                 }}
               />
@@ -96,19 +98,24 @@ export default class EstmtCreateCMInfoForm extends React.Component {
                 autoCorrect={false}
                 onChangeText={(text) => {
                   this.setState({...this.state, cmData: {...this.state.cmData, cmWorkCondition: text}});
-                  let v = validate('text', text);
+                  let v = validate('text', text, true);
                   this.setState({conditionError: !v[0], conditionErrorMessage: v[1]});
                 }}
               />
             </Item>
             <Text style={styles.errorMessage}>{this.state.conditionErrorMessage}</Text>
-            <Grid>
-              <Button large  primary onPress={() => this.props.previousePage()}>
-                <Text>이전</Text>
-              </Button>
-              <Button large success onPress={() => this.handleSubmit()}>
-                <Text>다음</Text>
-              </Button>
+
+            <Grid style={{marginTop: 100}}>
+              <Col>
+                <Button block  primary onPress={() => this.props.previousePage()}>
+                  <Text>이전</Text>
+                </Button>
+              </Col>
+              <Col>
+                <Button block success onPress={() => this.handleSubmit()}>
+                  <Text>다음</Text>
+                </Button>
+              </Col>
             </Grid>
           </Content>
         </Container>
@@ -136,28 +143,28 @@ export default class EstmtCreateCMInfoForm extends React.Component {
     if(postDataObj.cmAddress == ''){this.setState({errorMessage: '현거주지 주소는 필수 항목 입니다, 주소를 입력해 주세요.'}); return false;}
     if(postDataObj.cmAddressDetail == ''){this.setState({errorMessage: '현거주지 상세주소는 필수 항목 입니다, 주소를 입력해 주세요.'}); return false;}
 
-    var v = validate('text', this.state.cmData.cmRegidentType);
+    var v = validate('text', this.state.cmData.cmRegidentType, true);
     if(!v[0])
     {
-      console.error('invalid cmRegidentType');
-        this.setState({residentTypeError: !v[0], residentTypeErrorMessage: v[1]});
-        return false;
+      console.log('invalid cmRegidentType');
+      this.setState({residentTypeError: !v[0], residentTypeErrorMessage: v[1]});
+      return false;
     }
 
-    var v = validate('text', this.state.cmData.cmFloor);
+    var v = validate('text', this.state.cmData.cmFloor, true);
     if(!v[0])
     {
-      console.error('invalid cmFloor');
-        this.setState({floorError: !v[0], floorErrorMessage: v[1]});
-        return false;
+      console.log('invalid cmFloor');
+      this.setState({floorError: !v[0], floorErrorMessage: v[1]});
+      return false;
     }
 
-    var v = validate('text', this.state.cmData.cmSpace);
+    var v = validate('text', this.state.cmData.cmSpace, true);
     if(!v[0])
     {
-      console.error('invalid cmSpace');
-        this.setState({spaceError: !v[0], spaceErrorMessage: v[1]});
-        return false;
+      console.log('invalid cmSpace');
+      this.setState({spaceError: !v[0], spaceErrorMessage: v[1]});
+      return false;
     }
 
 
@@ -167,7 +174,6 @@ export default class EstmtCreateCMInfoForm extends React.Component {
   //Method of Save Estimate Address Info
   handleSubmit() {
     let isValid = this.isValidSubmitInfo();
-
 
     if(!isValid){return;}
 

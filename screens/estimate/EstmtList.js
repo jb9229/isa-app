@@ -70,9 +70,9 @@ export default class EstmtList extends React.Component {
       <View
         style={{
           height: 1,
-          width: '86%',
+          width: '100%',
           backgroundColor: '#CED0CE',
-          marginLeft: '14%',
+          // marginLeft: '14%',
         }}
       />
     );
@@ -85,16 +85,17 @@ export default class EstmtList extends React.Component {
 
   render() {
     return (
-      <List containerStyle={{borderTopWidth:0, borderBottomWidth:0}}>
+      <List containerStyle={{borderTopWidth:0, borderBottomWidth:0, marginTop:10}}>
         <FlatList
           data={this.state.data}
           renderItem={({item}) => (
             <ListItem
+              roundAvatar
               button onPress={() => {this.props.detailedEstimate(item.id)}}
               title={item.userName}
               subtitle={`${item.mvDate}, ${item.amount}톤`}
               containerStyle={{borderBottomWidth: 0}}
-
+              avatar={require('../../assets/images/default_avatar.png')}
             />
           )}
           ListFooterComponent={

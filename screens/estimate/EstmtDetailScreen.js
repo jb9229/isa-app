@@ -1,13 +1,21 @@
 import React from 'react';
-import {Alert, Image, Dimensions } from 'react-native';
-import {Card, CardItem, Container, Content, Col, Header, Grid, Row, Text} from 'native-base'
+import {Alert, Image, Dimensions, StyleSheet } from 'react-native';
+import {Body, Card, CardItem, Container, Content, Col, Grid, Header, Left, Row, Text} from 'native-base';
+import { Icon } from 'expo';
+// import { PanoramaView } from 'react-native-360';
+import Colors from '../../constants/Colors';
 
 
 export default class EstimateDetail extends React.Component {
+  static navigationOptions = {
+    title: '견적서 정보',
+  };
+
   constructor (props){
     super(props);
 
     this.state = {
+      // bedIconUri: require('../../assets/images/icon_bidet.png'),
       estimate: {
          mvDate: '',
          userName:'',
@@ -134,77 +142,119 @@ export default class EstimateDetail extends React.Component {
     var {height, width} = Dimensions.get('window');
     return (
       <Container>
-        <Content>
-          <Grid>
-            <Row>
-              <Col><Text>고객명</Text></Col>
-              <Col><Text>{this.state.estimate.userName}</Text></Col>
+        <Content >
+          <Grid bordered>
+            <Row bordered>
+              <Col bordered><Body><Text>고객명</Text></Body></Col>
+              <Col><Body><Text>{this.state.estimate.userName}</Text></Body></Col>
             </Row>
             <Row>
-              <Col><Text>이사 날짜</Text></Col>
-              <Col><Text>{this.state.estimate.mvDate}</Text></Col>
+              <Col><Body><Text>이사 날짜</Text></Body></Col>
+              <Col><Body><Text>{this.state.estimate.mvDate}</Text></Body></Col>
             </Row>
             <Row>
-              <Col><Text>예상물량</Text></Col>
-              <Col><Text>{this.state.estimate.amount}톤</Text></Col>
+              <Col><Body><Text>예상물량</Text></Body></Col>
+              <Col><Body><Text>{this.state.estimate.amount}톤</Text></Body></Col>
             </Row>
             <Row>
-              <Col><Text>거주지</Text></Col>
-              <Col><Text>{this.state.estimate.cmAddress}, {this.state.estimate.cmAddressDetail}</Text></Col>
+              <Col><Text style={styles.tableTitle}>▣ 현재 거주지: </Text></Col>
             </Row>
             <Row>
-              <Col><Text>현거주지 거주형태</Text></Col>
-              <Col><Text>{this.state.estimate.cmRegidentType}</Text></Col>
+              <Col><Body><Text>주소</Text></Body></Col>
+              <Col><Body><Text>{this.state.estimate.cmAddress}, {this.state.estimate.cmAddressDetail}</Text></Body></Col>
             </Row>
             <Row>
-              <Col><Text>층수</Text></Col>
-              <Col><Text>{this.state.estimate.cmFloor}</Text></Col>
+              <Col><Body><Text>거주형태</Text></Body></Col>
+              <Col><Body><Text>{this.state.estimate.cmRegidentType}</Text></Body></Col>
             </Row>
             <Row>
-              <Col><Text>평수</Text></Col>
-              <Col><Text>{this.state.estimate.cmSpace}</Text></Col>
+              <Col><Body><Text>층수</Text></Body></Col>
+              <Col><Body><Text>{this.state.estimate.cmFloor}</Text></Body></Col>
             </Row>
             <Row>
-              <Col><Text>작업조건</Text></Col>
-              <Col><Text>{this.state.estimate.cmWorkCondition}</Text></Col>
+              <Col><Body><Text>평수</Text></Body></Col>
+              <Col><Body><Text>{this.state.estimate.cmSpace}</Text></Body></Col>
             </Row>
             <Row>
-              <Col><Text>이사지</Text></Col>
-              <Col><Text>{this.state.estimate.nmAddress}, {this.state.estimate.nmAddressDetail}</Text></Col>
+              <Col><Body><Text>작업조건</Text></Body></Col>
+              <Col><Body><Text>{this.state.estimate.cmWorkCondition}</Text></Body></Col>
             </Row>
             <Row>
-              <Col><Text>이사지 거주형태</Text></Col>
-              <Col><Text>{this.state.estimate.nmRegidentType}</Text></Col>
+              <Col><Text style={styles.tableTitle}>▣ 이사 예정지: </Text></Col>
             </Row>
             <Row>
-              <Col><Text>층수</Text></Col>
-              <Col><Text>{this.state.estimate.nmFloor}</Text></Col>
+              <Col><Body><Text>주소</Text></Body></Col>
+              <Col><Body><Text>{this.state.estimate.nmAddress}, {this.state.estimate.nmAddressDetail}</Text></Body></Col>
             </Row>
             <Row>
-              <Col><Text>평수</Text></Col>
-              <Col><Text>{this.state.estimate.nmSpace}</Text></Col>
+              <Col><Body><Text>거주형태</Text></Body></Col>
+              <Col><Body><Text>{this.state.estimate.nmRegidentType}</Text></Body></Col>
             </Row>
             <Row>
-              <Col><Text>작업조건</Text></Col>
-              <Col><Text>{this.state.estimate.nmWorkCondition}</Text></Col>
+              <Col><Body><Text>층수</Text></Body></Col>
+              <Col><Body><Text>{this.state.estimate.nmFloor}</Text></Body></Col>
             </Row>
             <Row>
-              <Col><Text>에어컨</Text></Col>
-              <Col><Text>{this.state.estimate.airconditioner} {this.state.estimate.airconditionerType}</Text></Col>
+              <Col><Body><Text>평수</Text></Body></Col>
+              <Col><Body><Text>{this.state.estimate.nmSpace}</Text></Body></Col>
             </Row>
             <Row>
-              <Col><Text>고객 요청사항</Text></Col>
+              <Col><Body><Text>작업조건</Text></Body></Col>
+              <Col><Body><Text>{this.state.estimate.nmWorkCondition}</Text></Body></Col>
+            </Row>
+            <Row>
+              <Col><Text style={styles.tableTitle}>▣ 주요 집기 정보:</Text></Col>
+            </Row>
+            <Row>
+              <Col><Icon.FontAwesome name={'bed'} size={56} style={{ marginBottom: -3 }} color={this.state.estimate.bed ? Colors.tabIconSelected : Colors.tabIconDefault} /></Col>
+              <Col><Icon.MaterialCommunityIcons name={'air-conditioner'} size={56} style={{ marginBottom: -3 }} color={this.state.estimate.airconditioner? Colors.tabIconSelected : Colors.tabIconDefault} /></Col>
+              <Col><Icon.SimpleLineIcons name={'drawer'} size={56} style={{ marginBottom: -3 }} color={this.state.estimate.drawer? Colors.tabIconSelected : Colors.tabIconDefault} /></Col>
+              <Col><Icon.MaterialCommunityIcons name={'sofa'} size={56} style={{ marginBottom: -3 }} color={this.state.estimate.sofa? Colors.tabIconSelected: Colors.tabIconDefault} /></Col>
+            </Row>
+            <Row>
+              <Col><Icon.Feather name={'tv'} size={56} style={{ marginBottom: -3 }} color={this.state.estimate.tv? Colors.tabIconSelected: Colors.tabIconDefault} /></Col>
+              <Col><Icon.MaterialCommunityIcons name={'piano'} size={56} style={{ marginBottom: -3 }} color={this.state.estimate.piano? Colors.tabIconSelected: Colors.tabIconDefault} /></Col>
+
+              <Col><Icon.MaterialCommunityIcons name={'cup-water'} size={56} style={{ marginBottom: -3 }} color={this.state.estimate.waterpurifier? Colors.tabIconSelected: Colors.tabIconDefault} /></Col>
+              <Col><Icon.MaterialIcons name={'wc'} size={56} style={{ marginBottom: -3 }} color={this.state.estimate.bidet? Colors.tabIconSelected: Colors.tabIconDefault} /></Col>
+            </Row>
+            <Row>
+              <Col>
+                {this.state.estimate.bed ? (<Row><Text> ⊙침대타입: {this.state.estimate.bedType} </Text></Row>) : null}
+                {this.state.estimate.airconditioner ? (<Row><Text> ⊙에어컨타입: {this.state.estimate.airconditionerType} </Text></Row>) : null}
+                {this.state.estimate.drawer ? (<Row><Text> ⊙장농타입: {this.state.estimate.drawerType} </Text></Row>) : null}
+                {this.state.estimate.sofa ? (<Row><Text> ⊙안마의자타입: {this.state.estimate.sofaType} </Text></Row>) : null}
+                {this.state.estimate.tv ? (<Row><Text> ⊙TV타입: {this.state.estimate.tvType} </Text></Row>) : null}
+                {this.state.estimate.piano ? (<Row><Text> ⊙피아노 타입: {this.state.estimate.pianoType} </Text></Row>) : null}
+                {this.state.estimate.waterpurifier ? (<Row><Text> ⊙정수기 타입: {this.state.estimate.waterpurifierType} </Text></Row>) : null}
+                {this.state.estimate.bidet ? (<Row><Text> ⊙비데타입: {this.state.estimate.bidetType} </Text></Row>) : null}
+              </Col>
+            </Row>
+            <Row>
+              <Col><Text style={styles.tableTitle}>▣ 고객 요청사항: </Text></Col>
+            </Row>
+            <Row>
               <Col><Text>{this.state.estimate.clientAsk}</Text></Col>
             </Row>
             <Row>
-              <Col><Text>현관 사진</Text></Col>
-              <Col></Col>
+              <Col><Text style={styles.tableTitle} >▣ 현관 사진: </Text></Col>
             </Row>
             <Row>
               <Col>
                 <Card>
                   <CardItem cardBody>
-                    {this.state.estimate.entrPhoto !== ''? <Image source={{uri: this.state.estimate.entrPhoto}} style={{width:width,height: 400, marginTop:100}}/>: null}
+                    {this.state.estimate.entrPhoto !== ''?
+                      (<PanoramaView
+                          style={{height:200,width:width}}
+                          image={{uri:'https://s3.ap-northeast-2.amazonaws.com/elasticbeanstalk-ap-northeast-2-405113651581/isa/img/example_360.jpg'}}
+                          displayMode={'embedded'}
+                          enableFullscreenButton
+                          enableCardboardButton
+                          enableTouchTracking
+                          hidesTransitionView
+                          enableInfoButton={false}
+                      />   )
+                      : null}
                   </CardItem>
                 </Card>
               </Col>
@@ -215,3 +265,11 @@ export default class EstimateDetail extends React.Component {
     )
   }
 }
+
+const styles = StyleSheet.create({
+  tableTitle: {
+    fontWeight: 'bold',
+    marginTop: 10,
+    marginBottom: 10,
+  },
+});

@@ -120,7 +120,7 @@ export default class EstmtCreateForm extends React.Component {
           </View>
 
           <ViewPager
-            style={{flex: 1, flexGrow:1, width: width, height: height-200}}
+            style={{flex: 1, flexGrow:1, height: height+250}}
             ref={(viewPager) => {this.viewPager = viewPager}}
             onPageSelected={(page) => {this.setState({currentPage:page.position})}}
             peekEnabled = {true}

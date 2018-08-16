@@ -1,6 +1,6 @@
 import React from 'react';
 import {StyleSheet,} from 'react-native';
-import {Container, Row, Content, Grid, Header, Item, Button, Text, Textarea } from 'native-base';
+import {Button, Container, Col, Content, Form, Grid, Header, Item, Row, Text, Textarea } from 'native-base';
 
 
 
@@ -19,34 +19,34 @@ export default class EstmtCreateCommForm extends React.Component{
 
   render() {
     return(
-      <Container>
-        <Content padder>
-          <Grid>
-            <Row>
-              <Textarea
-                onChangeText={(text) =>
-                  this.setState({
-                    ...this.state,
-                    commentData: {
-                      clientAsk: text
-                    }
-                  })}
-                rowSpan={5} bordered placeholder="고객요청 사항" />
-            </Row>
+      <Form>
+     
+        <Textarea
+          onChangeText={(text) =>
+            this.setState({
+              ...this.state,
+              commentData: {
+                clientAsk: text
+              }
+            })}
+          rowSpan={5} bordered placeholder="고객요청 사항" />
 
-            <Row><Text style={styles.errorMessage}>{this.state.errorMessage}</Text></Row>
+        <Text style={styles.errorMessage}>{this.state.errorMessage}</Text>
 
-            <Row>
-              <Button large  primary onPress={() => this.props.previousePage()}>
-                <Text>이전</Text>
-              </Button>
-              <Button large success onPress={() => this.handleSubmit()}>
-                <Text>저장</Text>
-              </Button>
-            </Row>
+
+        <Grid style={{marginTop: 100}}>
+          <Col>
+            <Button block  primary onPress={() => this.props.previousePage()}>
+              <Text>이전</Text>
+            </Button>
+          </Col>
+          <Col>
+            <Button block success onPress={() => this.handleSubmit()}>
+              <Text>저장</Text>
+            </Button>
+          </Col>
         </Grid>
-        </Content>
-      </Container>
+      </Form>
     );
   }
 

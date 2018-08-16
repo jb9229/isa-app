@@ -1,6 +1,6 @@
 import React from 'react';
 import {StyleSheet, View, WebView, Alert} from 'react-native';
-import {Button, Container, Content, Grid, Label, Input, Icon, Item, Text, Picker} from 'native-base';
+import {Button, Container, Content, Col, Grid, Label, Input, Icon, Item, Text, Picker} from 'native-base';
 import {validate} from '../../utils/validation';
 
 
@@ -22,7 +22,7 @@ export default class EstmtCreateNMInfoForm extends React.Component {
       nmData: {
         nmAddress : '',
         nmAddressDetail : '',
-        nmRegidentType: '',
+        nmRegidentType: '아파트',
         nmFloor: 0,
         nmSpace: 0,
         nmWorkCondition: '',
@@ -40,7 +40,7 @@ export default class EstmtCreateNMInfoForm extends React.Component {
           <Content padder>
             <WebView
                 source={{uri: 'https://jb9229.github.io/postcode/'}}
-                style={{flex: 1, width: 300, height: 400}}
+                style={{flex: 1, height: 370}}
                 mixedContentMode='always'
                 onMessage={(event)=> this.savePostData(event.nativeEvent.data) }
             />
@@ -55,7 +55,7 @@ export default class EstmtCreateNMInfoForm extends React.Component {
                 autoCorrect={false}
                 onValueChange={(itemValue, itemIndex)  => {
                   this.setState({...this.state, nmData: {...this.state.nmData, nmRegidentType: itemValue}});
-                  let v = validate('text', itemValue);
+                  let v = validate('text', itemValue, true);
                   this.setState({regidentTypeError: !v[0], regidentTypeErrorMessage: v[1]});
                 }}
               >
@@ -68,9 +68,10 @@ export default class EstmtCreateNMInfoForm extends React.Component {
               <Label>층수</Label>
               <Input
                 autoCorrect={false}
+                keyboardType='numeric'
                 onChangeText={(text) => {
                   this.setState({...this.state, nmData: {...this.state.nmData, nmFloor: text}});
-                  let v = validate('text', text);
+                  let v = validate('text', text, true);
                   this.setState({floorError: !v[0], floorErrorMessage: v[1]});
                 }}
               />
@@ -81,9 +82,10 @@ export default class EstmtCreateNMInfoForm extends React.Component {
               <Label>평수</Label>
               <Input
                 autoCorrect={false}
+                keyboardType='numeric'
                 onChangeText={(text) => {
                   this.setState({...this.state, nmData: {...this.state.nmData, nmSpace: text}});
-                  let v = validate('text', text);
+                  let v = validate('text', text, true);
                   this.setState({spaceError: !v[0], spaceErrorMessage: v[1]});
                 }}
               />
@@ -96,19 +98,25 @@ export default class EstmtCreateNMInfoForm extends React.Component {
                 autoCorrect={false}
                 onChangeText={(text) => {
                   this.setState({...this.state, nmData: {...this.state.nmData, nmWorkCondition: text}});
-                  let v = validate('text', text);
+                  let v = validate('text', text, true);
                   this.setState({conditionError: !v[0], conditionErrorMessage: v[1]});
                 }}
               />
             </Item>
             <Text style={styles.errorMessage}>{this.state.conditionErrorMessage}</Text>
-            <Grid>
-              <Button large  primary onPress={() => this.props.previousePage()}>
-                <Text>이전</Text>
-              </Button>
-              <Button large success onPress={() => this.handleSubmit()}>
-                <Text>다음</Text>
-              </Button>
+
+
+            <Grid style={{marginTop: 100}}>
+              <Col>
+                <Button block  primary onPress={() => this.props.previousePage()}>
+                  <Text>이전</Text>
+                </Button>
+              </Col>
+              <Col>
+                <Button block success onPress={() => this.handleSubmit()}>
+                  <Text>다음</Text>
+                </Button>
+              </Col>
             </Grid>
           </Content>
         </Container>
@@ -132,31 +140,31 @@ export default class EstmtCreateNMInfoForm extends React.Component {
   isValidSubmitInfo = () => {
     let postDataObj = this.state.nmData;
 
-    if(postDataObj.nmAddress == ''){this.setState({errorMessage: '현거주지 주소는 필수 항목 입니다, 주소를 입력해 주세요.'}); return false;}
-    if(postDataObj.nmAddressDetail == ''){this.setState({errorMessage: '현거주지 상세주소는 필수 항목 입니다, 주소를 입력해 주세요.'}); return false;}
+    if(postDataObj.nmAddress == ''){this.setState({errorMessage: '이사지 주소는 필수 항목 입니다, 주소를 입력해 주세요.'}); return false;}
+    if(postDataObj.nmAddressDetail == ''){this.setState({errorMessage: '이사지 상세주소는 필수 항목 입니다, 주소를 입력해 주세요.'}); return false;}
 
-    var v = validate('text', this.state.nmData.nmRegidentType);
+    var v = validate('text', this.state.nmData.nmRegidentType, true);
     if(!v[0])
     {
-      console.error('invalid nmRegidentType');
-        this.setState({residentTypeError: !v[0], residentTypeErrorMessage: v[1]});
-        return false;
+      console.log('invalid nmRegidentType');
+      this.setState({residentTypeError: !v[0], residentTypeErrorMessage: v[1]});
+      return false;
     }
 
-    var v = validate('text', this.state.nmData.nmFloor);
+    var v = validate('decimal', this.state.nmData.nmFloor, true);
     if(!v[0])
     {
-      console.error('invalid nmFloor');
-        this.setState({floorError: !v[0], floorErrorMessage: v[1]});
-        return false;
+      console.log('invalid nmFloor');
+      this.setState({floorError: !v[0], floorErrorMessage: v[1]});
+      return false;
     }
 
-    var v = validate('text', this.state.nmData.nmSpace);
+    var v = validate('decimal', this.state.nmData.nmSpace, true);
     if(!v[0])
     {
-      console.error('invalid nmSpace');
-        this.setState({spaceError: !v[0], spaceErrorMessage: v[1]});
-        return false;
+      console.log('invalid nmSpace');
+      this.setState({spaceError: !v[0], spaceErrorMessage: v[1]});
+      return false;
     }
 
     return true;
