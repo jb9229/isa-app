@@ -2,7 +2,7 @@ import React from 'react';
 import {Alert, Image, Dimensions, StyleSheet } from 'react-native';
 import {Body, Card, CardItem, Container, Content, Col, Grid, Header, Left, Row, Text} from 'native-base';
 import { Icon } from 'expo';
-// import { PanoramaView } from 'react-native-360';
+
 import Colors from '../../constants/Colors';
 
 
@@ -65,6 +65,7 @@ export default class EstimateDetail extends React.Component {
       }
     }
   }
+
 
   componentDidMount() {
     const {navigation} = this.props;
@@ -139,6 +140,7 @@ export default class EstimateDetail extends React.Component {
   };
 
   render() {
+
     var {height, width} = Dimensions.get('window');
     return (
       <Container>
@@ -243,18 +245,7 @@ export default class EstimateDetail extends React.Component {
               <Col>
                 <Card>
                   <CardItem cardBody>
-                    {this.state.estimate.entrPhoto !== ''?
-                      (<PanoramaView
-                          style={{height:200,width:width}}
-                          image={{uri:'https://s3.ap-northeast-2.amazonaws.com/elasticbeanstalk-ap-northeast-2-405113651581/isa/img/example_360.jpg'}}
-                          displayMode={'embedded'}
-                          enableFullscreenButton
-                          enableCardboardButton
-                          enableTouchTracking
-                          hidesTransitionView
-                          enableInfoButton={false}
-                      />   )
-                      : null}
+                    {this.state.estimate.entrPhoto !== ''? <Image source={{uri: this.state.estimate.entrPhoto}} style={{width:width,height: 400, marginTop:100}}/>: null}
                   </CardItem>
                 </Card>
               </Col>

@@ -1,5 +1,6 @@
 import React from "react";
-import { View, FlatList } from "react-native";
+import {Dimensions, View, FlatList } from "react-native";
+import {Grid} from "native-base"
 import { List, ListItem, SearchBar } from 'react-native-elements';
 
 import ListFooter from '../../components/ListFooter';
@@ -10,6 +11,7 @@ export default class EstmtList extends React.Component {
 
     this.state = {
       loading: false,
+      last: false,
       data: [],
       page:0,
       error: null,
@@ -32,6 +34,7 @@ export default class EstmtList extends React.Component {
     .then(res => {
         this.setState({
           data: page === 0 ? res.content : [...this.state.data, ...res.content],
+          last: res.last,
           error: res.error || null,
           loading: false,
           refreshing: false
@@ -84,8 +87,10 @@ export default class EstmtList extends React.Component {
 
 
   render() {
+    var {height, width} = Dimensions.get('window');
     return (
-      <List containerStyle={{borderTopWidth:0, borderBottomWidth:0, marginTop:10}}>
+
+      <List containerStyle={{borderTopWidth:0, borderBottomWidth:0, marginTop:5, marginBottom:5, width: width-10}}>
         <FlatList
           data={this.state.data}
           renderItem={({item}) => (
@@ -93,13 +98,15 @@ export default class EstmtList extends React.Component {
               roundAvatar
               button onPress={() => {this.props.detailedEstimate(item.id)}}
               title={item.userName}
+              titleStyle={{ color: '#451066', fontWeight: 'bold' }}
+              subtitleStyle={{ color: '#b19cba' }}
               subtitle={`${item.mvDate}, ${item.amount}톤`}
-              containerStyle={{borderBottomWidth: 0}}
-              avatar={require('../../assets/images/default_avatar.png')}
+              containerStyle={{borderBottomWidth: 0, }}
+              avatar={require('../../assets/images/userIcon.png')}
             />
           )}
           ListFooterComponent={
-            <ListFooter hasMore={true} isLoading={this.state.loading} />
+            <ListFooter hasMore={!this.state.last} isLoading={this.state.loading} />
           }
           keyExtractor={ (item, index) => index.toString() }
           ItemSeparatorComponent={this.renderSeparator}
@@ -110,6 +117,7 @@ export default class EstmtList extends React.Component {
           onEndReachedThreshold={10}
         />
       </List>
+
     )
   }
 }
